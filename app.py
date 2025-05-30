@@ -7,10 +7,9 @@ app = Flask(__name__)
 def index():
     return render_template("index.html")
 
-
 @app.route('/next')
 def next_page():
-    return "This is the next page!"
+    return render_template("new.html")
 
 
 if __name__ == '__main__':
