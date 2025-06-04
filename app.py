@@ -1,5 +1,6 @@
 from flask import Flask, render_template
 
+from src.methods import test
 app = Flask(__name__)
 
 
@@ -9,6 +10,7 @@ def index():
 
 @app.route('/next')
 def next_page():
+    test()
     return render_template("new.html")
 
 
