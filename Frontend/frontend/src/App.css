@@ -50,3 +50,35 @@
   border: 2px inset #fff;
   margin-right: 5px;
 }
+
+.notepad-button{
+  background: none;
+  border: none;
+  outline: none;
+  box-shadow: none;
+  font-family: 'Pixelated MS Sans Serif', Arial;
+  font-size: 14px;
+  padding: 2px 10px;
+  margin-right: 2px;
+  margin-left: 5px;
+}
+.notepad-file-help-button{
+  background: none;
+  border: none;
+  outline: none;
+  box-shadow: none;
+  font-size: 12px;
+  text-decoration: underline;
+  text-align: left;
+
+
+ }
+
+.notepad-text-area{
+  width: 100%;
+  min-height: 200px;
+  min-width: 200px;
+  margin: 10px;
+  border: none;
+  padding: 50px;
+}
