@@ -2,6 +2,7 @@ import '../App.css';
 import '98.css';
 
 export default function Taskbar() {
+
     return (
         <div className="taskbar">
             <button className="start-button">
@@ -9,7 +10,11 @@ export default function Taskbar() {
                 Start
             </button>
             <div className="spacer" />
-            <div className="clock">8:25 PM</div> {/* später dynamisch */}
+            
+            <div className="clock">
+
+                8:40 PM
+            </div> {/* später dynamisch */}
         </div>
     );
 }
