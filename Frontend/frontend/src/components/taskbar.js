@@ -4,9 +4,9 @@ import '98.css';
 export default function Taskbar() {
 
     function updateTime() {
-        const currentdate = new Date().toLocaleTimeString();
+        const currenttime = new Date().toLocaleTimeString();
         //var datetime = currentdate.getHours() + ":" + currentdate.getMinutes();
-        document.getElementById("currenttime").textContent = currentdate;
+        document.getElementById("currenttime").textContent = currenttime;
     }
     setInterval(updateTime, 1000);
 
