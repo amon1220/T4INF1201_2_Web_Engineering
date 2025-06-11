@@ -29,7 +29,7 @@ export default function Notepad({ onClose }) {
                     <button className="notepad-file-help-button">Help</button>
                 </div>
 
-                <textarea className="notepad-text-area"  style={{ width: "300px" }}/>
+                <textarea className="notepad-text-area"  style={{ width: "300px", height : "300px" }}/>
                 {/*<div className="field-row-stacked" style={{ width: "300px" }}>
                     <label htmlFor="text20"></label>
                     <textarea id="text20" rows="8"></textarea>
