@@ -5,7 +5,6 @@ export default function Taskbar() {
 
     function updateTime() {
         const currenttime = new Date().toLocaleTimeString();
-        //var datetime = currentdate.getHours() + ":" + currentdate.getMinutes();
         document.getElementById("currenttime").textContent = currenttime;
     }
     setInterval(updateTime, 1000);
