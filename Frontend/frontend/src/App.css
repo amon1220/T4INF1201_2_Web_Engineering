@@ -22,6 +22,39 @@
   box-sizing: border-box;
 }
 
+.spacer {
+    width: 2px;           /* Feste Breite für den Trenner */
+    margin: 0 8px;        /* Etwas Abstand links und rechts */
+    color: gray;
+    flex-grow: 0;         /* Verhindert das Ausdehnen */
+}
+
+.taskbar-windows {
+    display: flex;
+    margin: 0 4px;
+    flex-grow: 1;         /* Lässt den Fensterbereich wachsen */
+    justify-content: flex-start; /* Richtet die Fenster links aus */
+}
+
+.taskbar-window-button {
+    min-width: 120px;
+    height: 22px;
+    margin: 0 2px;
+    padding: 2px 8px;
+    display: flex;
+    align-items: center;
+    font-family: 'Pixelated MS Sans Serif', Arial;
+    font-size: 11px;
+    text-align: left;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.taskbar-window-button:active {
+    border: 2px inset #fff;
+}
+
 .start-button {
   display: flex;
   align-items: center;
@@ -36,10 +69,6 @@
   width: 16px;
   height: 16px;
   margin-right: 4px;
-}
-
-.spacer {
-  flex-grow: 1;
 }
 
 .clock {
@@ -117,11 +146,48 @@
   margin-top: 15px;
 }
 
+.menu {
+  background-color: #c0c0c0;
+  border: 2px outset #fff;
+  width: 200px;
+  font-family: "Pixelated MS Sans Serif", Arial;
+}
+
+.menu-item {
+  padding: 4px 10px;
+  cursor: default;
+  white-space: nowrap;
+  position: relative;
+}
+
+.menu-item:hover {
+  background-color: #000080;
+  color: white;
+}
+
+.submenu {
+  position: absolute;
+  top: 0;
+  left: 100%;
+  background-color: #c0c0c0;
+  border: 2px outset #fff;
+  width: 200px;
+}
+
+
+
 #biggericon {
 
     width: 45px;
     height: 70px;
 
+}
+
+#loadinggate {
+  color: black;
+  font-weight: bold;
+  font-size: 45px;
+  margin-left: 10px;
 }
 
 #weathericon {
@@ -138,6 +204,7 @@ img {
   width: 40px;
   height: 40px;
 }
+
 
 span{
   color: white;

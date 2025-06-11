@@ -20,10 +20,26 @@ function App() {
     const [iExplorerOpen, setIExplorerOpen] = useState(false);
     const [myComputerOpen, setMyComputerOpen] = useState(false);
     const [weatherAppOpen, setWeatherAppOpen] = useState(false);
+    const [startWindowOpen, setStartWindowOpen] = useState(false);
+
     return (
         <div className="desktop">
-            {/* später hier Icons oder Fenster */}
-            <Taskbar />
+           <Taskbar 
+    openWindows={{
+        notepad: { isOpen: notepadOpen, title: "Notepad" },
+        recycleBin: { isOpen: recycleBinOpen, title: "Recycle Bin" },
+        iExplorer: { isOpen: iExplorerOpen, title: "Internet Explorer" },
+        hackingTool: { isOpen: hackingToolOpen, title: "Hacking Tool 3000" },
+        weatherApp: { isOpen: weatherAppOpen, title: "Weather App" }
+    }}
+    onWindowClick={{
+        notepad: () => setNotepadOpen(true),
+        recycleBin: () => setRecycleBinOpen(true),
+        iExplorer: () => setIExplorerOpen(true),
+        hackingTool: () => setHackingTool3000Open(true),
+        weatherApp: () => setWeatherAppOpen(true)
+    }}
+/>
 
             <RecycleBinButton onOpen={() => setRecycleBinOpen(true)} />
             {recycleBinOpen && (
