@@ -9,7 +9,6 @@ import DraggableWindow from "./draggableWindow.js";
 
 export function FileSelector({ onClose }) {
     useEffect(() => {
-        // Füge den Click-Event-Listener für die Zeilen-Auswahl hinzu
         document.querySelectorAll('table.interactive').forEach(element => {
             element.addEventListener('click', (event) => {
                 const highlightedClass = 'highlighted';
@@ -46,19 +45,18 @@ export function FileSelector({ onClose }) {
                                 <thead>
                                 <tr>
                                     <th>Name</th>
-                                    <th>Version</th>
+                                    <th>Erstellungsdatum</th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 <tr>
-                                    <td>Name</td>
-                                    <td>Version</td>
+                                    <td>Name einfügen</td>
+                                    <td>Erstellungsdatum einfügen</td>
                                 </tr>
-                                {/* Wiederhole diese Zeile mehrmals für mehr Einträge */}
                                 {Array(15).fill(null).map((_, index) => (
                                     <tr key={index}>
                                         <td>Testdokument</td>
-                                        <td>1.00</td>
+                                        <td>01.01.2025</td>
                                     </tr>
                                 ))}
                                 </tbody>
