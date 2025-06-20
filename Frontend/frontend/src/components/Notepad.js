@@ -1,13 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, {useState, useEffect} from "react";
 import "../App.css";
 import '98.css';
 import DraggableWindow from "./draggableWindow.js";
 
 
-
-
-
-export function FileSelector({ onClose }) {
+export function FileSelector({onClose}) {
     useEffect(() => {
         document.querySelectorAll('table.interactive').forEach(element => {
             element.addEventListener('click', (event) => {
@@ -18,7 +15,7 @@ export function FileSelector({ onClose }) {
                     .filter(isRow)
                     .find(element => element.classList.contains(highlightedClass));
 
-                if(previouslySelectedRow){
+                if (previouslySelectedRow) {
                     previouslySelectedRow.classList.toggle(highlightedClass);
                 }
 
@@ -30,8 +27,8 @@ export function FileSelector({ onClose }) {
     }, []);
 
     return (
-        <DraggableWindow initialPosition={{ x: 250, y: 150 }} handleSelector=".title-bar">
-            <div className="window" style={{ position: "absolute", width: "400px" }}>
+        <DraggableWindow initialPosition={{x: 250, y: 150}} handleSelector=".title-bar">
+            <div className="window" style={{position: "absolute", width: "400px"}}>
                 <div className="title-bar">
                     <div className="title-bar-text">Open File</div>
                     <div className="title-bar-controls">
@@ -39,8 +36,8 @@ export function FileSelector({ onClose }) {
                     </div>
                 </div>
                 <div className="window-body">
-                    <div className="sunken-panel" style={{ height: "200px", width: "100%", overflow: "hidden" }}>
-                        <div style={{ width: "100%", height: "100%", overflow: "auto" }}>
+                    <div className="sunken-panel" style={{height: "200px", width: "100%", overflow: "hidden"}}>
+                        <div style={{width: "100%", height: "100%", overflow: "auto"}}>
                             <table className="table-notepad">
                                 <thead>
                                 <tr>
@@ -63,7 +60,7 @@ export function FileSelector({ onClose }) {
                             </table>
                         </div>
                     </div>
-                    <div className="field-row" style={{ justifyContent: "flex-end", padding: "10px" }}>
+                    <div className="field-row" style={{justifyContent: "flex-end", padding: "10px"}}>
                         <button>Open</button>
                         <button onClick={onClose}>Cancel</button>
                     </div>
@@ -74,50 +71,47 @@ export function FileSelector({ onClose }) {
 }
 
 
-
-export default function Notepad({ onClose }) {
+export default function Notepad({onClose}) {
     // Defintionen für das Filemenü
     const [fileMenuOpen, setFileMenuOpen] = useState(false);
     const [showFileSelector, setShowFileSelector] = useState(false);
 
 
-    function startNotpadFileMenu(){
+    function startNotpadFileMenu() {
         setFileMenuOpen(!fileMenuOpen);
     }
+
     function handleOpenFile() {
         setShowFileSelector(true);
         setFileMenuOpen(false);
     }
 
 
-
     return (
         <>
-            <DraggableWindow initialPosition={{ x: 200, y: 100 }} handleSelector=".title-bar">
-            <div className="window" style={{position: "absolute"}}>
+            <DraggableWindow initialPosition={{x: 200, y: 100}} handleSelector=".title-bar">
+                <div className="window" style={{position: "absolute"}}>
 
-                <div className="title-bar">
-                    <div className="title-bar-text">Notepad</div>
-                    <div className="title-bar-controls">
-                        <button aria-label="Minimize"></button>
-                        <button aria-label="Maximize"></button>
-                        <button aria-label="Close" onClick={onClose}></button>
+                    <div className="title-bar">
+                        <div className="title-bar-text">Notepad</div>
+                        <div className="title-bar-controls">
+                            <button aria-label="Minimize"></button>
+                            <button aria-label="Maximize"></button>
+                            <button aria-label="Close" onClick={onClose}></button>
+                        </div>
                     </div>
-                </div>
 
 
-
-
-                <div className="window-body" style={{
-                    padding: 0,
-                    margin: 0,
-                    display: "flex",
-                    flexDirection: "column"
-                }}>
-                    <statusbar style={{ position: 'relative' }}>
-                        <button className="notepad-file-help-button" onClick={startNotpadFileMenu}>File</button>
-                        <button className="notepad-file-help-button">Help</button>
-                        {fileMenuOpen && (
+                    <div className="window-body" style={{
+                        padding: 0,
+                        margin: 0,
+                        display: "flex",
+                        flexDirection: "column"
+                    }}>
+                        <statusbar style={{position: 'relative'}}>
+                            <button className="notepad-file-help-button" onClick={startNotpadFileMenu}>File</button>
+                            <button className="notepad-file-help-button">Help</button>
+                            {fileMenuOpen && (
                                 <div className="window-body" style={{
                                     padding: 0,
                                     margin: 0
@@ -127,26 +121,25 @@ export default function Notepad({ onClose }) {
                                         <div className="menu-item" onClick={handleOpenFile}>Open File</div>
                                     </div>
                                 </div>
-                        )}
+                            )}
 
-                    </statusbar>
+                        </statusbar>
 
-                    <textarea className="notepad-text-area"  style={{ width: "300px", height : "300px" }}/>
+                        <textarea className="notepad-text-area" style={{width: "300px", height: "300px"}}/>
+
+                    </div>
+
 
                 </div>
 
-
-            </div>
-
-        </DraggableWindow>
-        {showFileSelector && (
-            <FileSelector onClose={() => setShowFileSelector(false)} />
-        )}
+            </DraggableWindow>
+            {showFileSelector && (
+                <FileSelector onClose={() => setShowFileSelector(false)}/>
+            )}
 
 
         </>
     );
-
 
 
 }

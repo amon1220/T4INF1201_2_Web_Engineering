@@ -1,7 +1,7 @@
 import './App.css';
 import Taskbar from './components/taskbar';
 
-import React, { useState } from "react";
+import React, {useState} from "react";
 import NotepadButton from "./components/NotepadButton";
 import Notepad from "./components/Notepad";
 import RecycleBinButton from "./components/RecycleBinButton";
@@ -24,44 +24,44 @@ function App() {
 
     return (
         <div className="desktop">
-           <Taskbar 
-    openWindows={{
-        notepad: { isOpen: notepadOpen, title: "Notepad" },
-        recycleBin: { isOpen: recycleBinOpen, title: "Recycle Bin" },
-        iExplorer: { isOpen: iExplorerOpen, title: "Internet Explorer" },
-        hackingTool: { isOpen: hackingToolOpen, title: "Hacking Tool 3000" },
-        weatherApp: { isOpen: weatherAppOpen, title: "Weather App" }
-    }}
-    onWindowClick={{
-        notepad: () => setNotepadOpen(true),
-        recycleBin: () => setRecycleBinOpen(true),
-        iExplorer: () => setIExplorerOpen(true),
-        hackingTool: () => setHackingTool3000Open(true),
-        weatherApp: () => setWeatherAppOpen(true)
-    }}
-/>
+            <Taskbar
+                openWindows={{
+                    notepad: {isOpen: notepadOpen, title: "Notepad"},
+                    recycleBin: {isOpen: recycleBinOpen, title: "Recycle Bin"},
+                    iExplorer: {isOpen: iExplorerOpen, title: "Internet Explorer"},
+                    hackingTool: {isOpen: hackingToolOpen, title: "Hacking Tool 3000"},
+                    weatherApp: {isOpen: weatherAppOpen, title: "Weather App"}
+                }}
+                onWindowClick={{
+                    notepad: () => setNotepadOpen(true),
+                    recycleBin: () => setRecycleBinOpen(true),
+                    iExplorer: () => setIExplorerOpen(true),
+                    hackingTool: () => setHackingTool3000Open(true),
+                    weatherApp: () => setWeatherAppOpen(true)
+                }}
+            />
 
-            <RecycleBinButton onOpen={() => setRecycleBinOpen(true)} />
+            <RecycleBinButton onOpen={() => setRecycleBinOpen(true)}/>
             {recycleBinOpen && (
-            <RecycleBin onClose={() => setRecycleBinOpen(false)} />
+                <RecycleBin onClose={() => setRecycleBinOpen(false)}/>
             )}
 
 
-            <NotepadButton onOpen={() => setNotepadOpen(true)} />
+            <NotepadButton onOpen={() => setNotepadOpen(true)}/>
             {notepadOpen && (
-            <Notepad onClose={() => setNotepadOpen(false)} />
+                <Notepad onClose={() => setNotepadOpen(false)}/>
             )}
-            <IExplorerButton onOpen={() => setIExplorerOpen(true)} />
+            <IExplorerButton onOpen={() => setIExplorerOpen(true)}/>
             {iExplorerOpen && (
-            <IExplorer onClose={() => setIExplorerOpen(false)} />
+                <IExplorer onClose={() => setIExplorerOpen(false)}/>
             )}
-            <HackingTool3000Button onOpen={() => setHackingTool3000Open(true)} />
+            <HackingTool3000Button onOpen={() => setHackingTool3000Open(true)}/>
             {hackingToolOpen && (
-            <HackingTool3000 onClose={() => setHackingTool3000Open(false)} />
+                <HackingTool3000 onClose={() => setHackingTool3000Open(false)}/>
             )}
-            <WeatherAppButton onOpen={() => setWeatherAppOpen(true)} />
+            <WeatherAppButton onOpen={() => setWeatherAppOpen(true)}/>
             {weatherAppOpen && (
-                <WeatherApp onClose={() => setWeatherAppOpen(false)} />
+                <WeatherApp onClose={() => setWeatherAppOpen(false)}/>
             )}
 
         </div>

@@ -3,14 +3,16 @@ from sqlalchemy.orm import Session
 from Backend.src.models import *
 from Backend.src.methods import engine
 
-api_bp = Blueprint('api', __name__)
+api = Blueprint('api', __name__)
 
-@api_bp.route('/data')
+
+@api.route('/data')
 def get_data():
     return "Placeholder"
 
-#/api/users GET get all users
-@api_bp.route('/users')
+
+# /api/users GET get all users
+@api.route('/users')
 def get_users():
     with Session(engine) as session:
         users = session.query(User).all()
@@ -21,8 +23,9 @@ def get_users():
             'email': u.email
         } for u in users])
 
-#/api/users/1 GET get user by id
-@api_bp.route('/users/<int:user_id>', methods=['GET'])
+
+# /api/users/1 GET get user by id
+@api.route('/users/<int:user_id>', methods=['GET'])
 def get_user(user_id):
     with Session(engine) as session:
         user = session.get(User, user_id)
@@ -35,8 +38,9 @@ def get_user(user_id):
             })
         return abort(404, "User not found")
 
-#/api/users POST add new user
-@api_bp.route('/users', methods=['POST'])
+
+# /api/users POST add new user
+@api.route('/users', methods=['POST'])
 def create_user():
     data = request.json
     if not all(k in data for k in ('username', 'email', 'password')):
@@ -52,8 +56,9 @@ def create_user():
         session.commit()
         return jsonify({'message': 'User created', 'user_id': new_user.user_id}), 201
 
-#/api/users/1 PUT update user by id
-@api_bp.route('/users/<int:user_id>', methods=['PUT'])
+
+# /api/users/1 PUT update user by id
+@api.route('/users/<int:user_id>', methods=['PUT'])
 def update_user(user_id):
     data = request.json
 
@@ -69,8 +74,9 @@ def update_user(user_id):
         session.commit()
         return jsonify({'message': 'User updated'}), 200
 
-#/api/users/1 DELETE delete user by id
-@api_bp.route('/users/<int:user_id>', methods=['DELETE'])
+
+# /api/users/1 DELETE delete user by id
+@api.route('/users/<int:user_id>', methods=['DELETE'])
 def delete_user(user_id):
     with Session(engine) as session:
         user = session.get(User, user_id)
@@ -82,8 +88,9 @@ def delete_user(user_id):
         session.commit()
         return jsonify({'message': 'User deleted'}), 200
 
-#/api/notepads GET get all notepads
-@api_bp.route('/notepads')
+
+# /api/notepads GET get all notepads
+@api.route('/notepads')
 def get_notepads():
     with Session(engine) as session:
         notepads = session.query(Notepad).all()
@@ -96,8 +103,9 @@ def get_notepads():
             'last_edited': n.last_edited
         } for n in notepads])
 
-#/api/notepads/1 GET get all notepads for user_id
-@api_bp.route('/notepads/<int:data_user_id>', methods=['GET'])
+
+# /api/notepads/1 GET get all notepads for user_id
+@api.route('/notepads/<int:data_user_id>', methods=['GET'])
 def get_user_notepads(user_id):
     with Session(engine) as session:
         user = session.get(User, user_id)
@@ -116,8 +124,9 @@ def get_user_notepads(user_id):
 
         return jsonify(result), 200
 
+
 # /api/notepads/1 GET get notepad by id
-@api_bp.route('/notepads/<int:notepad_id>', methods=['GET'])
+@api.route('/notepads/<int:notepad_id>', methods=['GET'])
 def get_notepad(notepad_id):
     with Session(engine) as session:
         notepad = session.get(Notepad, notepad_id)
@@ -133,8 +142,8 @@ def get_notepad(notepad_id):
         return abort(404, "Notepad not found")
 
 
-#/api/notepad POST add new notepad
-@api_bp.route('/notepad', methods=['POST'])
+# /api/notepad POST add new notepad
+@api.route('/notepad', methods=['POST'])
 def create_notepad():
     data = request.json
     if not all(k in data for k in ('saved_text', 'created', 'last_edited')):
@@ -150,8 +159,9 @@ def create_notepad():
         session.commit()
         return jsonify({'message': 'Notepad created', 'notepad_id': new_notepad.notepad_id}), 201
 
-#/api/notepad/1 PUT update notepad by id
-@api_bp.route('/notepad/<int:notepad_id>', methods=['PUT'])
+
+# /api/notepad/1 PUT update notepad by id
+@api.route('/notepad/<int:notepad_id>', methods=['PUT'])
 def update_notepad(notepad_id):
     data = request.json
 
@@ -167,8 +177,9 @@ def update_notepad(notepad_id):
         session.commit()
         return jsonify({'message': 'Notepad updated'}), 200
 
-#/api/notepad/1 DELETE delete notepad by id
-@api_bp.route('/notepad/<int:notepad_id>', methods=['DELETE'])
+
+# /api/notepad/1 DELETE delete notepad by id
+@api.route('/notepad/<int:notepad_id>', methods=['DELETE'])
 def delete_notepad(notepad_id):
     with Session(engine) as session:
         notepad = session.get(Notepad, notepad_id)

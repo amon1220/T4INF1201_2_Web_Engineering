@@ -5,8 +5,11 @@ engine = create_engine('sqlite:///db/database.db', echo=True)
 Base.metadata.create_all(engine)
 
 Session = sessionmaker(bind=engine)
+
+
 def create_session():
     return Session()
+
 
 def test():
     session = create_session()

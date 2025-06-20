@@ -1,6 +1,6 @@
 import '../App.css';
 import '98.css';
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from "react";
 import weatherIcon from '../assets/WeatherAppImage.png';
 
 export default function Taskbar({openWindows, onWindowClick}) {
@@ -35,42 +35,42 @@ export default function Taskbar({openWindows, onWindowClick}) {
     };
 
 
-        function StartWindow() {
-            const [hoveredItem, setHoveredItem] = useState(null);
+    function StartWindow() {
+        const [hoveredItem, setHoveredItem] = useState(null);
 
-            return (
-                <div className="window"
-                     style={{
-                         position: "absolute",
-                         bottom: "38.5px",
-                         left: "0",
-                         zIndex: 9999
-                     }}>
-                    <div className="window-body" style={{
-                        padding: 0,
-                        margin: 0,
-                        display: "flex",
-                        flexDirection: "column"
-                    }}>
-                        <div className="menu">
-                            <div
-                                className="menu-item"
-                                onMouseEnter={() => setHoveredItem("Settings")}
-                                onMouseLeave={() => setHoveredItem(null)}
-                            >➤  Settings
-                                {hoveredItem === "Settings" && (
-                                    <div className="submenu">
-                                        <div className="menu-item" style={{color: "black"}} >Change Password</div>
-                                    </div>
-                                )}
-                            </div>
-                            <div className="menu-item">Logout</div>
-                            <div className="menu-item">Shut Down</div>
+        return (
+            <div className="window"
+                 style={{
+                     position: "absolute",
+                     bottom: "38.5px",
+                     left: "0",
+                     zIndex: 9999
+                 }}>
+                <div className="window-body" style={{
+                    padding: 0,
+                    margin: 0,
+                    display: "flex",
+                    flexDirection: "column"
+                }}>
+                    <div className="menu">
+                        <div
+                            className="menu-item"
+                            onMouseEnter={() => setHoveredItem("Settings")}
+                            onMouseLeave={() => setHoveredItem(null)}
+                        >➤ Settings
+                            {hoveredItem === "Settings" && (
+                                <div className="submenu">
+                                    <div className="menu-item" style={{color: "black"}}>Change Password</div>
+                                </div>
+                            )}
                         </div>
+                        <div className="menu-item">Logout</div>
+                        <div className="menu-item">Shut Down</div>
                     </div>
                 </div>
-            );
-        }
+            </div>
+        );
+    }
 
     const toggleStartMenu = () => {
         setIsStartMenuOpen(!isStartMenuOpen);
@@ -82,10 +82,10 @@ export default function Taskbar({openWindows, onWindowClick}) {
                 className={`start-button ${isStartMenuOpen ? 'active' : ''}`}
                 onClick={toggleStartMenu}
             >
-                <img src="https://win98icons.alexmeub.com/icons/png/windows-0.png" alt="start" />
+                <img src="https://win98icons.alexmeub.com/icons/png/windows-0.png" alt="start"/>
                 Start
             </button>
-            <div style= {{}} className="spacer">||</div>
+            <div style={{}} className="spacer">||</div>
             <div className="taskbar-windows">
                 {Object.entries(openWindows || {}).map(([key, window]) => (
                     window.isOpen && (
@@ -97,7 +97,7 @@ export default function Taskbar({openWindows, onWindowClick}) {
                             <img
                                 src={getIconForWindow(key)}
                                 alt=""
-                                style={{ width: '16px', height: '16px', marginRight: '4px' }}
+                                style={{width: '16px', height: '16px', marginRight: '4px'}}
                             />
                             {window.title}
                         </button>
@@ -109,7 +109,7 @@ export default function Taskbar({openWindows, onWindowClick}) {
             <div className="clock">
                 <div id="currenttime"></div>
             </div>
-            {isStartMenuOpen && <StartWindow />}
+            {isStartMenuOpen && <StartWindow/>}
         </div>
     );
 }
