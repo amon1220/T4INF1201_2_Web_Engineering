@@ -1,6 +1,5 @@
-from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from src.models import *
+from Backend.src.models import *
 
 engine = create_engine('sqlite:///db/database.db', echo=True)
 Base.metadata.create_all(engine)
