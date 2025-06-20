@@ -1,5 +1,6 @@
 from flask import Flask, jsonify
 from flask_cors import CORS
+from src.methods import *
 
 from Backend.src import api
 
@@ -11,6 +12,11 @@ app.register_blueprint(api.api, url_prefix='/api')
 
 @app.route('/api/status', methods=['GET'])
 def status():
+    return jsonify({"status": "connected", "service": "Database API"})
+
+@app.route('/api/test', methods=['GET'])
+def status():
+    test_db()
     return jsonify({"status": "connected", "service": "Database API"})
 
 
