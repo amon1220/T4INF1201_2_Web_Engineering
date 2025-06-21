@@ -97,7 +97,7 @@ def get_notepads():
 
         return jsonify([{
             'notepad_id': n.notepad_id,
-            'data_user_id': n.data_user_id,
+            'user_id': n.user_id,
             'email': n.saved_text,
             'created': n.created,
             'last_edited': n.last_edited
@@ -105,7 +105,7 @@ def get_notepads():
 
 
 # /api/notepads/1 GET get all notepads for user_id
-@api.route('/notepads/<int:data_user_id>', methods=['GET'])
+@api.route('/notepads/<int:user_id>', methods=['GET'])
 def get_user_notepads(user_id):
     with Session(engine) as session:
         user = session.get(User, user_id)
@@ -113,7 +113,7 @@ def get_user_notepads(user_id):
         if not user:
             return abort(404, "User not found")
 
-        notepads = session.query(Notepad).filter(Notepad.data_user_id == user_id).all()
+        notepads = session.query(Notepad).filter(Notepad.user_id == user_id).all()
 
         result = [{
             'notepad_id': n.notepad_id,
@@ -134,7 +134,7 @@ def get_notepad(notepad_id):
         if notepad:
             return jsonify({
                 'notepad_id': notepad.notepad_id,
-                'data_user_id': notepad.data_user_id,
+                'user_id': notepad.user_id,
                 'saved_text': notepad.saved_text,
                 'created': notepad.created,
                 'last_edited': notepad.last_edited
