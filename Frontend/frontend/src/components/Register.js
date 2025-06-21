@@ -1,7 +1,20 @@
 import React from "react";
 import "../App.css";
+import {useNavigate} from "react-router-dom";
 
 export default function Register() {
+    const navigate = useNavigate();
+
+    //I know both do the same but the lower one still has to get logic
+    const handleClickBack = () => {
+        navigate('/Login');
+    };
+
+    const handleClickOk = () => {
+        navigate('/Login');
+    };
+
+
     return (
         <div className="desktop">
             <div
@@ -53,7 +66,9 @@ export default function Register() {
                             justifyContent: "flex-end"
                         }}
                     >
-                        <button type="submit">OK</button>
+                        <button type="button" onClick={handleClickOk}>
+                            OK
+                        </button>
                     </div>
                     <div
                         style={{
@@ -63,7 +78,9 @@ export default function Register() {
                             justifyContent: "flex-end"
                         }}
                     >
-                        <button type="button">Back</button>
+                        <button type="button" onClick={handleClickBack}>
+                            Back
+                        </button>
                     </div>
 
                     <form

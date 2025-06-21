@@ -1,7 +1,18 @@
 import React from "react";
 import "../App.css";
+import {useNavigate} from 'react-router-dom';
 
 export default function Login() {
+    const navigate = useNavigate();
+
+    const handleClickRegister = () => {
+        navigate('/Register');
+    };
+
+    const handleClickOk = () => {
+        navigate('/Desktop');
+    };
+
     return (
         <div className="desktop">
             <div
@@ -53,7 +64,9 @@ export default function Login() {
                             justifyContent: "flex-end"
                         }}
                     >
-                        <button type="submit">OK</button>
+                        <button type="button" onClick={handleClickOk}>
+                            OK
+                        </button>
                     </div>
                     <div
                         style={{
@@ -63,7 +76,9 @@ export default function Login() {
                             justifyContent: "flex-end"
                         }}
                     >
-                        <button type="button">Register</button>
+                        <button type="button" onClick={handleClickRegister}>
+                            Register
+                        </button>
                     </div>
 
                     <form
