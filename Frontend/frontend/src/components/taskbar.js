@@ -2,9 +2,23 @@ import '../App.css';
 import '98.css';
 import React, {useEffect, useState} from "react";
 import weatherIcon from '../assets/WeatherAppImage.png';
+import {useNavigate} from "react-router-dom";
 
 export default function Taskbar({openWindows, onWindowClick}) {
     const [isStartMenuOpen, setIsStartMenuOpen] = useState(false);
+    const navigate = useNavigate();
+
+    const handleChangePassword = () => {
+        navigate('/ChangePassword');
+    };
+
+    const handleLogout = () => {
+        navigate('/Login');
+    };
+    //IDK if it should do something different
+    const handleShutdown = () => {
+        navigate('/Login');
+    };
 
     function updateTime() {
         const currenttime = new Date().toLocaleTimeString();
@@ -60,12 +74,15 @@ export default function Taskbar({openWindows, onWindowClick}) {
                         >➤ Settings
                             {hoveredItem === "Settings" && (
                                 <div className="submenu">
-                                    <div className="menu-item" style={{color: "black"}}>Change Password</div>
+                                    <div className="menu-item" style={{color: "black"}}
+                                         onClick={handleChangePassword}>
+                                        Change Password
+                                    </div>
                                 </div>
                             )}
                         </div>
-                        <div className="menu-item">Logout</div>
-                        <div className="menu-item">Shut Down</div>
+                        <div className="menu-item" onClick={handleLogout}>Logout</div>
+                        <div className="menu-item" onClick={handleShutdown}>Shut Down</div>
                     </div>
                 </div>
             </div>
