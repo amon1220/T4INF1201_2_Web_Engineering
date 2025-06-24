@@ -4,6 +4,7 @@ import './App.css';
 import Desktop from './components/Desktop';
 import Login from './components/Login';
 import Register from './components/Register';
+import ChangePassword from "./components/ChangePassword";
 
 
 function App() {
@@ -13,6 +14,7 @@ function App() {
                 <Route path="/Desktop" element={<Desktop/>}/>
                 <Route path="/Login" element={<Login/>}/>
                 <Route path="/Register" element={<Register/>}/>
+                <Route path="/ChangePassword" element={<ChangePassword/>}/>
                 <Route path="*" element={<Navigate to="/Login" replace />} />
             </Routes>
         </Router>
