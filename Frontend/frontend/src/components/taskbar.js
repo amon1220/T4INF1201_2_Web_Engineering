@@ -3,6 +3,10 @@ import '98.css';
 import React, {useEffect, useState} from "react";
 import weatherIcon from '../assets/WeatherAppImage.png';
 import {useNavigate} from "react-router-dom";
+//IDK why it works like this and not with the path directly
+import shutdownIcon from '../assets/shut_down_normal-3.png';
+import LogoutIcon from '../assets/key_win-0.png';
+import SettingsIcon from '../assets/settings_gear_cool-4.png';
 
 export default function Taskbar({openWindows, onWindowClick}) {
     const [isStartMenuOpen, setIsStartMenuOpen] = useState(false);
@@ -51,7 +55,8 @@ export default function Taskbar({openWindows, onWindowClick}) {
 
     function StartWindow() {
         const [hoveredItem, setHoveredItem] = useState(null);
-
+        //IDK why I cant do html comments in the return and also I cant change the fact that the underlined text is the wrong color when hoverd over
+        // also alt is purposefully left empty because when the image doesn't load, it doesn't, there is already text explaining it
         return (
             <div className="window"
                  style={{
@@ -71,7 +76,8 @@ export default function Taskbar({openWindows, onWindowClick}) {
                             className="menu-item"
                             onMouseEnter={() => setHoveredItem("Settings")}
                             onMouseLeave={() => setHoveredItem(null)}
-                        >➤ Settings
+                        ><img src={SettingsIcon} alt={""} className="menu-icon"/>
+                            <span style={{textDecoration: "underline", color: "black"}}>S</span>ettings    ➤
                             {hoveredItem === "Settings" && (
                                 <div className="submenu">
                                     <div className="menu-item" style={{color: "black"}}
@@ -81,8 +87,15 @@ export default function Taskbar({openWindows, onWindowClick}) {
                                 </div>
                             )}
                         </div>
-                        <div className="menu-item" onClick={handleLogout}>Logout</div>
-                        <div className="menu-item" onClick={handleShutdown}>Shut Down</div>
+                        <div className="menu-item" onClick={handleLogout}>
+                            <img src={LogoutIcon} alt={""} className="menu-icon"/>
+                            <span style={{textDecoration: "underline", color: "black"}}>L</span>og Off
+                        </div>
+
+                        <div className="menu-item" onClick={handleShutdown}>
+                            <img src={shutdownIcon} alt={""} className="menu-icon"/>
+                            Sh<span style={{textDecoration: "underline", color: "black"}}>u</span>t Down...
+                        </div>
                     </div>
                 </div>
             </div>

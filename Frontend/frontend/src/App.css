@@ -161,11 +161,21 @@
     cursor: default;
     white-space: nowrap;
     position: relative;
+    align-items: center;
+    display: flex;
+    /* cursor: pointer; could be reasonable but in this reference https://copy.sh/v86/?profile=windows95 it is more authentic if it dosnt happen*/
 }
+
 
 .menu-item:hover {
     background-color: #000080;
     color: white;
+}
+
+.menu-icon {
+    width: 30px;
+    height: 30px;
+    align-items: center;
 }
 
 .submenu {
