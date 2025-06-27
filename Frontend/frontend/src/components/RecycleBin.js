@@ -1,7 +1,12 @@
 import React from "react";
 import "../App.css";
 import DraggableWindow from "./draggableWindow.js";
-
+/**
+ *  Just the basic UI Window placeholder, will maybe be filled with content later
+ * @param OnClose just determines the component thats called on in Desktop.js to close the tab
+ *
+ * @returns a draggable window that can be filled with content
+ */
 export default function RecycleBin({onClose}) {
     return (
         <DraggableWindow initialPosition={{x: 200, y: 100}} handleSelector=".title-bar">

@@ -1,11 +1,16 @@
 import '../App.css';
 import '98.css';
+/**
+ *  Just the basic UI button
+ * @param OnOpen just determines the component thats called on in App.js to open the tab
 
-export default function HackingTool3000Button({onOpen}) {
+ * @returns a button with an icon that registers if clicked, connected to Desktop.js
+ */
+export default function HackingTool3000Button({ onOpen }) {
     return (
         <div className="hackingtool3000-icon">
             <button className="hackingtool3000-button" onClick={onOpen}>
-                <img src="https://win98icons.alexmeub.com/icons/png/window_red_hilights.png" alt="htool3000icon"/>
+                <img src="https://win98icons.alexmeub.com/icons/png/window_red_hilights.png" alt="htool3000icon" />
                 <br></br>
                 <span>HackingTool 3000</span>
             </button>
