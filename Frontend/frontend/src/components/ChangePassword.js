@@ -2,6 +2,11 @@ import React from "react";
 import "../App.css";
 import {useNavigate} from 'react-router-dom';
 
+/**
+ * This function defines the ChangePassword site
+ *
+ * @returns Html code for the ChangePassword site
+ */
 export default function ChangePassword() {
     const navigate = useNavigate();
 

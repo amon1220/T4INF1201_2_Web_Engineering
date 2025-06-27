@@ -2,6 +2,11 @@ import React from "react";
 import "../App.css";
 import {useNavigate} from 'react-router-dom';
 
+/**
+ * This function defines the Login site
+ *
+ * @returns Html code for the Login site
+ */
 export default function Login() {
     const navigate = useNavigate();
 
@@ -12,7 +17,6 @@ export default function Login() {
     const handleClickOk = () => {
         navigate('/Desktop');
     };
-
     return (
         <div className="desktop">
             <div

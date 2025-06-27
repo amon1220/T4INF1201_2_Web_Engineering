@@ -2,6 +2,11 @@ import React from "react";
 import "../App.css";
 import {useNavigate} from "react-router-dom";
 
+/**
+ * This function defines the Register site
+ *
+ * @returns Html code for the Register site
+ */
 export default function Register() {
     const navigate = useNavigate();
 
@@ -13,7 +18,6 @@ export default function Register() {
     const handleClickOk = () => {
         navigate('/Login');
     };
-
 
     return (
         <div className="desktop">

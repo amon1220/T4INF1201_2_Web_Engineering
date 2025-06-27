@@ -6,7 +6,11 @@ import Login from './components/Login';
 import Register from './components/Register';
 import ChangePassword from "./components/ChangePassword";
 
-
+/**
+ * App is the main component of the application, it the routs
+ *
+ * @returns {JSX.Element} The router with the correct routes for the sites
+ */
 function App() {
     return (
         <Router>
