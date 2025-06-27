@@ -6,17 +6,13 @@ from src.methods import *
 from Backend.src import api
 
 app = Flask(__name__)
-app.config["JWT_KEY"] = "victorias_secret"
+app.config["JWT_SECRET_KEY"] = "victorias_secret"
 CORS(app)
 
 jwt = JWTManager(app)
 
 app.register_blueprint(api.api, url_prefix='/api')
 
-
-@app.route('/api/status', methods=['GET'])
-def status():
-    return jsonify({"status": "connected", "service": "Database API"})
 
 @app.route('/api/test_db', methods=['GET'])
 def status():
