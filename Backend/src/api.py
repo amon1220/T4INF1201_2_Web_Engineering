@@ -10,12 +10,24 @@ api = Blueprint('api', __name__)
 
 @api.route('/data')
 def get_data():
+    """
+    GET /dataAdd commentMore actions
+
+    route for initial testing
+    """
     return "Placeholder"
 
 
-# /api/users GET get all users
 @api.route('/users')
 def get_users():
+    """
+    GET /users
+
+    Get a list of all users
+
+    Returns:
+        JSON: A list of users with 'user_id', 'username', and 'email' fields.
+    """
     with Session(engine) as session:
         users = session.query(User).all()
 
@@ -26,9 +38,22 @@ def get_users():
         } for u in users])
 
 
-# /api/users/1 GET get user by id
 @api.route('/users/<int:user_id>', methods=['GET'])
 def get_user(user_id):
+    """
+    GET /users/<user_id>
+
+    Get a user by id.
+
+    Args:
+        user_id (int): The id of the user.
+
+    Returns:
+        JSON: A user object containing 'user_id', 'username', and 'email' fields.
+
+    Raises:
+        404: If there is no user associated with the given id.
+    """
     with Session(engine) as session:
         user = session.get(User, user_id)
 
@@ -41,9 +66,26 @@ def get_user(user_id):
         return abort(404, "User not found")
 
 
-# /api/users POST add new user
+
 @api.route('/users', methods=['POST'])
 def create_user():
+    """
+    POST /users
+
+    Create a new user with the provided data.
+
+    Request JSON:
+        {
+            'username': str,
+            "email": str,
+            "password": str
+        }
+
+    Returns:
+        JSON: Success message and new user id.
+    Raises:
+        400: If not all required information is provided.
+    """
     data = request.json
     if not all(k in data for k in ('username', 'email', 'password')):
         return abort(400, "Missing fields")
@@ -54,16 +96,29 @@ def create_user():
         new_user = User(
             username=data['username'],
             email=data['email'],
-            password= pw_hash
+            password=pw_hash
         )
         session.add(new_user)
         session.commit()
         return jsonify({'message': 'User created', 'user_id': new_user.user_id}), 201
 
 
-# /api/users/1 PUT update user by id
 @api.route('/users/<int:user_id>', methods=['PUT'])
 def update_user(user_id):
+    """
+    GET /users/<user_id>
+
+    Get a user by id.
+
+    Args:
+        user_id (int): The id of the user.
+
+    Returns:
+        JSON: A user object containing 'user_id', 'username', and 'email' fields.
+
+    Raises:
+        404: If there is no user associated with the given id.
+    """
     data = request.json
 
     with Session(engine) as session:
@@ -79,9 +134,18 @@ def update_user(user_id):
         return jsonify({'message': 'User updated'}), 200
 
 
-# /api/users/1 DELETE delete user by id
 @api.route('/users/<int:user_id>', methods=['DELETE'])
 def delete_user(user_id):
+    """
+    DELETE /users/<user_id>
+
+    Delete a user by id.
+
+    Returns:
+        JSON: Success message.
+    Raises:
+        404: If the user doesn´t exist.
+    """
     with Session(engine) as session:
         user = session.get(User, user_id)
 
@@ -93,7 +157,6 @@ def delete_user(user_id):
         return jsonify({'message': 'User deleted'}), 200
 
 
-# /api/notepads GET get all notepads
 @api.route('/notepads')
 def get_notepads():
     with Session(engine) as session:
@@ -108,9 +171,16 @@ def get_notepads():
         } for n in notepads])
 
 
-# /api/notepads/1 GET get all notepads for user_id
 @api.route('/notepads/<int:user_id>', methods=['GET'])
 def get_user_notepads(user_id):
+    """
+    GET /notepads
+
+    Get all notepads.
+
+    Returns:
+        JSON: List of all notepads.
+    """
     with Session(engine) as session:
         user = session.get(User, user_id)
 
@@ -129,9 +199,21 @@ def get_user_notepads(user_id):
         return jsonify(result), 200
 
 
-# /api/notepads/1 GET get notepad by id
 @api.route('/notepads/<int:notepad_id>', methods=['GET'])
 def get_notepad(notepad_id):
+    """
+    GET /notepads/<notepad_id>
+
+    Get a single notepad by id.
+
+    Args:
+        notepad_id (int): id of the notepad.
+
+    Returns:
+        JSON: Notepad data.
+    Raises:
+        404: If the notepad doesn´t exist.
+    """
     with Session(engine) as session:
         notepad = session.get(Notepad, notepad_id)
 
@@ -146,9 +228,25 @@ def get_notepad(notepad_id):
         return abort(404, "Notepad not found")
 
 
-# /api/notepad POST add new notepad
 @api.route('/notepad', methods=['POST'])
 def create_notepad():
+    """
+    POST /notepad
+
+    Create a new notepad.
+
+    Request JSON:
+        {
+            "saved_text": str,
+            "created": str,
+            "last_edited": str
+        }
+
+    Returns:
+        JSON: Success message and new notepad id.
+    Raises:
+        400: If required fields are missing.
+    """
     data = request.json
     if not all(k in data for k in ('saved_text', 'created', 'last_edited')):
         return abort(400, "Missing fields")
@@ -164,9 +262,25 @@ def create_notepad():
         return jsonify({'message': 'Notepad created', 'notepad_id': new_notepad.notepad_id}), 201
 
 
-# /api/notepad/1 PUT update notepad by id
 @api.route('/notepad/<int:notepad_id>', methods=['PUT'])
 def update_notepad(notepad_id):
+    """
+    PUT /notepad/<notepad_id>
+
+    Update an existing notepad.
+
+    Request JSON 'saved_text' || 'created' || 'last_edited' (logical or):
+        {
+            "saved_text": str,
+            "created": str,
+            "last_edited": str
+        }
+
+    Returns:
+        JSON: Success message.
+    Raises:
+        404: If the notepad doesn´t exist.
+    """
     data = request.json
 
     with Session(engine) as session:
@@ -182,9 +296,18 @@ def update_notepad(notepad_id):
         return jsonify({'message': 'Notepad updated'}), 200
 
 
-# /api/notepad/1 DELETE delete notepad by id
 @api.route('/notepad/<int:notepad_id>', methods=['DELETE'])
 def delete_notepad(notepad_id):
+    """
+    DELETE /notepad/<notepad_id>
+
+    Delete a notepad by id.
+
+    Returns:
+        JSON: Success message.
+    Raises:
+        404: If the notepad doesn´t exist.
+    """
     with Session(engine) as session:
         notepad = session.get(Notepad, notepad_id)
 
@@ -195,6 +318,8 @@ def delete_notepad(notepad_id):
         session.commit()
         return jsonify({'message': 'Notepad deleted'}),
 
+
+# the name is kid of misleading "file" would be better
 @api.route('login', methods=['POST'])
 def login():
     data = request.json
