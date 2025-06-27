@@ -2,6 +2,8 @@ from flask import Blueprint, request, jsonify, abort
 from sqlalchemy.orm import Session
 from Backend.src.models import *
 from Backend.src.methods import engine
+from werkzeug.security import generate_password_hash, check_password_hash
+from flask_jwt_extended import create_access_token
 
 api = Blueprint('api', __name__)
 
@@ -46,11 +48,13 @@ def create_user():
     if not all(k in data for k in ('username', 'email', 'password')):
         return abort(400, "Missing fields")
 
+    pw_hash = generate_password_hash(data['password'])
+
     with Session(engine) as session:
         new_user = User(
             username=data['username'],
             email=data['email'],
-            password=data['password']
+            password= pw_hash
         )
         session.add(new_user)
         session.commit()
@@ -189,4 +193,24 @@ def delete_notepad(notepad_id):
 
         session.delete(notepad)
         session.commit()
-        return jsonify({'message': 'Notepad deleted'}), 200
+        return jsonify({'message': 'Notepad deleted'}),
+
+@api.route('login', methods=['POST'])
+def login():
+    data = request.json
+    username = data.get('username')
+    password = data.get('password')
+    with Session(engine) as session:
+        user = session.query(User).filter_by(username=username).first()
+        if not user or not check_password_hash(user.password, password):
+            return abort(401, "Invalid username or password")
+
+        access_token = create_access_token(identity=user.user_id)
+        return jsonify({
+            'access_token': access_token,
+            'user': {
+                'user_id': user.user_id,
+                'username': user.username,
+                'email': user.email
+            }
+        }), 200
