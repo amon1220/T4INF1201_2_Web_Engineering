@@ -1,8 +1,7 @@
-import React, {useState, useEffect} from "react";
+import React , { useState, useEffect } from "react";
 import "../App.css";
 import DraggableWindow from "./draggableWindow.js";
-
-
+//mapping the the names for the api weather states to a picture
 const weatherIconMap = {
     "clear-night": require('../assets/Clearnight.png'),
     "clear-day": require('../assets/Sunny.png'),
@@ -15,62 +14,32 @@ const weatherIconMap = {
     "snow": require('../assets/Snow.png'),
     "thunder": require('../assets/Thunderstorm.png'),
 };
+//just gets the date for the app and formats it
 const date = new Date();
 const formattedDateYear = date.getFullYear();
-const formattedDateMonth = date.getUTCMonth() + 1;
+const formattedDateMonth = date.getUTCMonth()+1;
 const formattedDateDay = date.getUTCDate();
-const formattedDateReady = "" + formattedDateDay + "." + formattedDateMonth + "." + formattedDateYear;
-export default function WeatherApp({onClose}) {
+const formattedDateReady = ""+formattedDateDay + "." + formattedDateMonth + "." + formattedDateYear;
+/**
+ * This function is a working weather app in the look of our website, it provides the weather data for the next few hours in Stuttgart via Brightsky API.
+ * @param OnClose just does the same as in the other components, gives parameter that interacts with App.js to close window
+ *
+ * @returns A draggable window that shows weather
+ */
+export default function WeatherApp({ onClose }) {
     const [weatherData, setWeatherData] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
-    const [windows, setWindows] = useState([
-        {
-            id: 1,
-            title: "Recycle Bin",
-            icon: "https://win98icons.alexmeub.com/icons/png/msie1-4.png",
-            minimized: false,
-            visible: true
-        },
-        {
-            id: 2,
-            title: "Notepad",
-            icon: "https://win98icons.alexmeub.com/icons/png/msie1-4.png",
-            minimized: false,
-            visible: true
-        },
-        {
-            id: 3,
-            title: "Internet Explorer",
-            icon: "https://win98icons.alexmeub.com/icons/png/msie1-4.png",
-            minimized: false,
-            visible: true
-        },
-        {
-            id: 4,
-            title: "HackerTool3000 - The most useless Hacking Tool in the World!",
-            icon: "https://win98icons.alexmeub.com/icons/png/msie1-4.png",
-            minimized: false,
-            visible: true
-        },
-        {
-            id: 5,
-            title: "Weather",
-            icon: "",
-            minimized: false,
-            visible: true
-        },
-    ]);
 
     useEffect(() => {
         const today = new Date();
         const formattedDate = today.toISOString().split('T')[0];
         const currentHour = today.getHours();
 
-        // Timer für 1,5 Sekunden setzen
+        // loading screen
         const timer = setTimeout(() => {
             setIsLoading(false);
         }, 500);
-
+        //fetch api data
         fetch(`https://api.brightsky.dev/weather?lat=48.7758&lon=9.1829&date=${formattedDate}`)
             .then(res => res.json())
             .then(data => {
@@ -78,20 +47,20 @@ export default function WeatherApp({onClose}) {
                     const entryHour = new Date(entry.timestamp).getHours();
                     return entryHour >= currentHour;
                 });
-
+                
                 const startIndex = currentTimeIndex === -1 ? 0 : currentTimeIndex;
                 const hourly = data.weather.slice(startIndex, startIndex + 5);
                 setWeatherData(hourly);
             })
             .catch(err => console.error("Wetterdaten konnten nicht geladen werden:", err));
 
-        // Cleanup-Funktion
+        // cleanup-function
         return () => clearTimeout(timer);
     }, []);
-
+    // this is just the draggable loading screen thats there for about half a sec
     if (isLoading) {
         return (
-            <DraggableWindow initialPosition={{x: 200, y: 100}} handleSelector=".title-bar">
+            <DraggableWindow initialPosition={{ x: 200, y: 100 }} handleSelector=".title-bar">
                 <div className="window" style={{position: "absolute"}}>
                     <div className="title-bar">
                         <div className="title-bar-text">Weather</div>
@@ -116,9 +85,9 @@ export default function WeatherApp({onClose}) {
             </DraggableWindow>
         );
     }
-
+    //this is the weather app itself, pulled up after the loading screen, the loading screen prevents the afterloading of pictures.
     return (
-        <DraggableWindow initialPosition={{x: 200, y: 100}} handleSelector=".title-bar">
+        <DraggableWindow initialPosition={{ x: 200, y: 100 }} handleSelector=".title-bar">
             <div className="window" style={{position: "absolute"}}>
                 <div className="title-bar">
                     <div className="title-bar-text">Weather</div>
@@ -137,27 +106,26 @@ export default function WeatherApp({onClose}) {
                     flexDirection: "column",
                 }}>
                     <span id={"date"}>Stuttgart, {formattedDateReady}</span>
-                    <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
-                        <span
-                            id={"celsiusbig"}>{weatherData[0]?.temperature ? `${Math.round(weatherData[0].temperature)}°C` : '--°C'}</span>
-                        <img id={"weathericon"}
-                             src={weatherData[0]?.icon ? weatherIconMap[weatherData[0].icon] : weatherIconMap['clear']}
-                             alt="Weather"/>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <span id={"celsiusbig"}>{weatherData[0]?.temperature ? `${Math.round(weatherData[0].temperature)}°C` : '--°C'}</span>
+                        <img id={"weathericon"} 
+                             src={weatherData[0]?.icon ? weatherIconMap[weatherData[0].icon] : weatherIconMap['clear']} 
+                             alt="Weather" />
                     </div>
 
-                    <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                         {weatherData.map((entry, index) => (
                             <div key={index} style={{
                                 display: 'flex',
                                 flexDirection: 'column',
                                 alignItems: 'center',
-                                padding: '15px'
+                                padding:'15px'
                             }}>
                                 <span id={"time"}>{new Date(entry.timestamp).getHours()}:00</span>
                                 <img
                                     src={weatherIconMap[entry.icon]}
                                     alt={entry.icon}
-                                    style={{width: '50px', height: '67px'}}
+                                    style={{ width: '50px', height: '67px' }}
                                 />
                                 <span id={"time"}>{Math.round(entry.temperature)}°C</span>
                             </div>

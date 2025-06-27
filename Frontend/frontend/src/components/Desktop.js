@@ -13,7 +13,7 @@ import WeatherAppButton from "./WeatherAppButton";
 import WeatherApp from "./WeatherApp";
 
 function Desktop() {
-
+//Variables to determine the State of the Popups on screen
     const [notepadOpen, setNotepadOpen] = useState(false); // true = geöffnet
     const [recycleBinOpen, setRecycleBinOpen] = useState(false);
     const [hackingToolOpen, setHackingTool3000Open] = useState(false);
@@ -21,7 +21,7 @@ function Desktop() {
     const [myComputerOpen, setMyComputerOpen] = useState(false);
     const [weatherAppOpen, setWeatherAppOpen] = useState(false);
     const [startWindowOpen, setStartWindowOpen] = useState(false);
-
+    //SPA Frontend of Desktop starts here, cant write comments inside of return statements, this just opens up each Pop-up by the OnClick determined in every component file
     return (
         <div className="desktop">
             <Taskbar
