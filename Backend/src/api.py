@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify, abort
-from sqlalchemy.orm import create_session
 from Backend.src.models import *
+from Backend.src.methods import create_session
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_jwt_extended import create_access_token
 
