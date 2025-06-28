@@ -17,10 +17,14 @@ export default function Taskbar({openWindows, onWindowClick}) {
     };
 
     const handleLogout = () => {
+        localStorage.removeItem("accessToken");
+        localStorage.removeItem("user");
         navigate('/Login');
     };
     //IDK if it should do something different
     const handleShutdown = () => {
+        localStorage.removeItem("accessToken");
+        localStorage.removeItem("user");
         navigate('/Login');
     };
 
@@ -77,7 +81,7 @@ export default function Taskbar({openWindows, onWindowClick}) {
                             onMouseEnter={() => setHoveredItem("Settings")}
                             onMouseLeave={() => setHoveredItem(null)}
                         ><img src={SettingsIcon} alt={""} className="menu-icon"/>
-                            <span style={{textDecoration: "underline", color: "black"}}>S</span>ettings    ➤
+                            <span style={{textDecoration: "underline", color: "black"}}>S</span>ettings ➤
                             {hoveredItem === "Settings" && (
                                 <div className="submenu">
                                     <div className="menu-item" style={{color: "black"}}

@@ -1,12 +1,14 @@
 import React, {useState} from "react";
 import "../App.css";
-import {useNavigate} from 'react-router-dom';
+import {useNavigate, useLocation} from 'react-router-dom';
 
 export default function Login() {
     const navigate = useNavigate();
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
+    const routerLocation = useLocation();
+    const from = routerLocation.state?.from?.pathname || "/Desktop";
 
     const handleClickRegister = () => {
         navigate('/Register');
@@ -39,7 +41,7 @@ export default function Login() {
             const {accessToken, user} = await res.json();
             localStorage.setItem("accessToken", accessToken);
             localStorage.setItem("user", JSON.stringify(user));
-            navigate('/Desktop');
+            navigate(from, { replace: true });
         } catch (err) {
             setError(err.message || "An error occurred during login");
         }
