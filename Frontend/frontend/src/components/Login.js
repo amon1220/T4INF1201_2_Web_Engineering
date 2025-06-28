@@ -25,8 +25,15 @@ export default function Login() {
             });
 
             if (!res.ok) {
-                const msg = await res.text();
-                throw new Error(msg.message || "Login failed");
+                const contentType = res.headers.get("Content-Type") || "";
+                let errMsg;
+                if (contentType.includes("application/json")) {
+                    const {message} = await res.json();
+                    errMsg = message;
+                } else {
+                    errMsg = await res.text();
+                }
+                throw new Error(errMsg || "Register failed");
             }
 
             const {accessToken, user} = await res.json();

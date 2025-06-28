@@ -1,7 +1,6 @@
 from flask import Blueprint, request, jsonify, abort
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import create_session
 from Backend.src.models import *
-from Backend.src.methods import engine
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_jwt_extended import create_access_token
 
@@ -28,7 +27,7 @@ def get_users():
     Returns:
         JSON: A list of users with 'user_id', 'username', and 'email' fields.
     """
-    with Session(engine) as session:
+    with create_session() as session:
         users = session.query(User).all()
 
         return jsonify([{
@@ -54,7 +53,7 @@ def get_user(user_id):
     Raises:
         404: If there is no user associated with the given id.
     """
-    with Session(engine) as session:
+    with create_session() as session:
         user = session.get(User, user_id)
 
         if user:
@@ -92,7 +91,7 @@ def create_user():
 
     pw_hash = generate_password_hash(data['password'])
 
-    with Session(engine) as session:
+    with create_session() as session:
         new_user = User(
             username=data['username'],
             email=data['email'],
@@ -121,7 +120,7 @@ def update_user(user_id):
     """
     data = request.json
 
-    with Session(engine) as session:
+    with create_session() as session:
         user = session.get(User, user_id)
 
         if not user:
@@ -146,7 +145,7 @@ def delete_user(user_id):
     Raises:
         404: If the user doesn´t exist.
     """
-    with Session(engine) as session:
+    with create_session() as session:
         user = session.get(User, user_id)
 
         if not user:
@@ -159,7 +158,7 @@ def delete_user(user_id):
 
 @api.route('/notepads')
 def get_notepads():
-    with Session(engine) as session:
+    with create_session() as session:
         notepads = session.query(Notepad).all()
 
         return jsonify([{
@@ -181,7 +180,7 @@ def get_user_notepads(user_id):
     Returns:
         JSON: List of all notepads.
     """
-    with Session(engine) as session:
+    with create_session() as session:
         user = session.get(User, user_id)
 
         if not user:
@@ -214,7 +213,7 @@ def get_notepad(notepad_id):
     Raises:
         404: If the notepad doesn´t exist.
     """
-    with Session(engine) as session:
+    with create_session() as session:
         notepad = session.get(Notepad, notepad_id)
 
         if notepad:
@@ -251,7 +250,7 @@ def create_notepad():
     if not all(k in data for k in ('saved_text', 'created', 'last_edited')):
         return abort(400, "Missing fields")
 
-    with Session(engine) as session:
+    with create_session() as session:
         new_notepad = Notepad(
             saved_text=data['saved_text'],
             created=data['created'],
@@ -283,7 +282,7 @@ def update_notepad(notepad_id):
     """
     data = request.json
 
-    with Session(engine) as session:
+    with create_session() as session:
         notepad = session.get(Notepad, notepad_id)
 
         if not notepad:
@@ -308,7 +307,7 @@ def delete_notepad(notepad_id):
     Raises:
         404: If the notepad doesn´t exist.
     """
-    with Session(engine) as session:
+    with create_session() as session:
         notepad = session.get(Notepad, notepad_id)
 
         if not notepad:
@@ -320,12 +319,12 @@ def delete_notepad(notepad_id):
 
 
 # the name is kid of misleading "file" would be better
-@api.route('login', methods=['POST'])
+@api.route('/login', methods=['POST'])
 def login():
     data = request.json
     username = data.get('username')
     password = data.get('password')
-    with Session(engine) as session:
+    with create_session() as session:
         user = session.query(User).filter_by(username=username).first()
         if not user or not check_password_hash(user.password, password):
             return abort(401, "Invalid username or password")
@@ -337,5 +336,36 @@ def login():
                 'user_id': user.user_id,
                 'username': user.username,
                 'email': user.email
+            }
+        }), 200
+
+@api.route('/register', methods=['POST'])
+def register():
+    data = request.json
+    username = data.get('username')
+    email = data.get('email')
+    password = data.get('password')
+
+    if not all([username, email, password]):
+        return jsonify({'message': 'Missing Fields'}), 400
+
+    with create_session() as session:
+        if session.query(User).filter_by(username=username).first():
+            return jsonify({'message': 'Username already exits'}), 400
+        if session.query(User).filter_by(email=email).first():
+            return jsonify({'message': 'Email already exists'}), 400
+
+        hashed_pw = generate_password_hash(password)
+        new_user = User(username=username, email=email, password=hashed_pw)
+        session.add(new_user)
+        session.commit()
+
+        access_token = create_access_token(identity=new_user.user_id)
+        return jsonify({
+            'access_token': access_token,
+            'user': {
+                'user_id': new_user.user_id,
+                'username': new_user.username,
+                'email': new_user.email
             }
         }), 200
