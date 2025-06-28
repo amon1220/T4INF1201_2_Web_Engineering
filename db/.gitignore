@@ -1,0 +1,1 @@
+# There are probably better ways, but I like this way. This is just so when the database starts, a db folder is found where it can put database.db. Now I have no problems with trying to make this folder in a script. Also, Git doesn't allow empty dirs, so this file is here.
