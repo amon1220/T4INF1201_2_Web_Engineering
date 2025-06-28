@@ -172,9 +172,8 @@ def get_notepads():
         return jsonify([{
             'notepad_id': n.notepad_id,
             'user_id': n.user_id,
-            'email': n.saved_text,
+            'saved_text': n.saved_text,
             'created': n.created,
-            'last_edited': n.last_edited
         } for n in notepads])
 
 
@@ -205,7 +204,6 @@ def get_user_notepads(user_id):
             'notepad_id': n.notepad_id,
             'saved_text': n.saved_text,
             'created': n.created,
-            'last_edited': n.last_edited
         } for n in notepads]
 
         return jsonify(result), 200
@@ -235,7 +233,6 @@ def get_notepad(notepad_id):
                 'user_id': notepad.user_id,
                 'saved_text': notepad.saved_text,
                 'created': notepad.created,
-                'last_edited': notepad.last_edited
             })
         return abort(404, "Notepad not found")
 
@@ -253,7 +250,6 @@ def create_notepad():
             "user_id": int,
             "saved_text": str,
             "created": str,
-            "last_edited": str
         }
 
     Returns:
@@ -262,7 +258,7 @@ def create_notepad():
         400: If required fields are missing.
     """
     data = request.json
-    required_fields = ('user_id', 'saved_text', 'created', 'last_edited')
+    required_fields = ('user_id', 'saved_text', 'created')
     missing = [k for k in required_fields if k not in data]
     if missing:
         return abort(400, f"Missing fields: {', '.join(missing)}")
@@ -272,7 +268,6 @@ def create_notepad():
             user_id=data['user_id'],
             saved_text=data['saved_text'],
             created=data['created'],
-            last_edited=data['last_edited']
         )
         session.add(new_notepad)
         session.commit()
@@ -287,11 +282,10 @@ def update_notepad(notepad_id):
 
     Update an existing notepad.
 
-    Request JSON 'saved_text' || 'created' || 'last_edited' (logical or):
+    Request JSON 'saved_text' || 'created' (logical or):
         {
             "saved_text": str,
             "created": str,
-            "last_edited": str
         }
 
     Returns:
@@ -309,7 +303,6 @@ def update_notepad(notepad_id):
 
         notepad.saved_text = data.get('saved_text', notepad.saved_text)
         notepad.created = data.get('created', notepad.created)
-        notepad.last_edited = data.get('last_edited', notepad.last_edited)
         session.commit()
         return jsonify({'message': 'Notepad updated'}), 200
 

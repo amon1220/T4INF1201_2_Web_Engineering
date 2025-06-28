@@ -1,30 +1,57 @@
-import React, {useState, useEffect} from "react";
+import React, {useState, useEffect, useRef} from "react";
 import "../App.css";
 import '98.css';
 import DraggableWindow from "./draggableWindow.js";
 
+export function FileSelector({onClose, notepads, setTextContent}) {
+    const [selectedRowIndex, setSelectedRowIndex] = useState(null);
+    const [error, setError] = useState("");
+    const tableRef = useRef(null);
 
-export function FileSelector({onClose}) {
-    useEffect(() => {
-        document.querySelectorAll('table.interactive').forEach(element => {
-            element.addEventListener('click', (event) => {
-                const highlightedClass = 'highlighted';
-                const isRow = element => element.tagName === 'TR' && element.parentElement.tagName === 'TBODY';
-                const newlySelectedRow = event.composedPath().find(isRow);
-                const previouslySelectedRow = Array.from(newlySelectedRow?.parentElement?.children || [])
-                    .filter(isRow)
-                    .find(element => element.classList.contains(highlightedClass));
+    useEffect(() => { //BE CAREFUL WHEN LETTING THIS FUNCTION SET AN ERROR idk why i cant do it in the first line, too bad
+        const table = tableRef.current;
+        if (!table) return;
 
-                if (previouslySelectedRow) {
-                    previouslySelectedRow.classList.toggle(highlightedClass);
-                }
+        const handleClick = (event) => {
+            const row = event.target.closest('tr');
+            if (!row || !row.parentElement || row.parentElement.tagName !== 'TBODY') return;
 
-                if (newlySelectedRow) {
-                    newlySelectedRow.classList.toggle(highlightedClass);
-                }
-            });
-        });
+            const rows = Array.from(table.querySelectorAll('tbody tr'));
+            const index = rows.indexOf(row);
+
+            setSelectedRowIndex(index);
+            setError(""); //HERE
+        };
+
+        table.addEventListener('click', handleClick);
+
+        return () => table.removeEventListener('click', handleClick);
     }, []);
+
+    const handleOpenFileInner = () => {
+        if (selectedRowIndex !== null) {
+            const selectedNotepad = notepads[selectedRowIndex];
+            //console.log('Selected row:', selectedNotepad);
+            setTextContent(selectedNotepad.saved_text)
+            onClose();
+
+        } else {
+            setError("Please select a file first.");
+        }
+    };
+
+    function truncate(str, maxLength) {
+        return str.length > maxLength ? str.slice(0, maxLength - 3) + '...' : str;
+    }
+
+    function formatDateTime(isoString) {
+        const date = new Date(isoString);
+        const time = date.toLocaleTimeString('en-GB', {hour12: false});
+        const day = String(date.getDate()).padStart(2, '0');
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const year = date.getFullYear();
+        return `${time} ${day}/${month}/${year}`;
+    }
 
     return (
         <DraggableWindow initialPosition={{x: 250, y: 150}} handleSelector=".title-bar">
@@ -38,18 +65,19 @@ export function FileSelector({onClose}) {
                 <div className="window-body">
                     <div className="sunken-panel" style={{height: "200px", width: "100%", overflow: "hidden"}}>
                         <div style={{width: "100%", height: "100%", overflow: "auto"}}>
-                            <table className="table-notepad">
+                            <table className="table-notepad interactive" ref={tableRef}>
                                 <thead>
                                 <tr>
-                                    <th>Name</th>
-                                    <th>Erstellungsdatum</th>
+                                    <th>Content</th>
+                                    <th>Creation date</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                {Array(15).fill(null).map((_, index) => (
-                                    <tr key={index}>
-                                        <td>Testdokument</td>
-                                        <td>01.01.2025</td>
+                                {notepads.map((notepad, index) => (
+                                    <tr key={notepad.notepad_id}
+                                        className={index === selectedRowIndex ? 'highlighted' : ''}>
+                                        <td>{truncate(notepad.saved_text, 10)}</td>
+                                        <td>{formatDateTime(notepad.created)}</td>
                                     </tr>
                                 ))}
                                 </tbody>
@@ -57,7 +85,8 @@ export function FileSelector({onClose}) {
                         </div>
                     </div>
                     <div className="field-row" style={{justifyContent: "flex-end", padding: "10px"}}>
-                        <button>Open</button>
+                        <div style={{color: "red", fontSize: "12px"}}>{error}</div>
+                        <button onClick={handleOpenFileInner}>Open</button>
                         <button onClick={onClose}>Cancel</button>
                     </div>
                 </div>
@@ -72,25 +101,42 @@ export default function Notepad({onClose}) {
     const [fileMenuOpen, setFileMenuOpen] = useState(false);
     const [showFileSelector, setShowFileSelector] = useState(false);
     const [error, setError] = useState("");
-
+    const [notepads, setNotepads] = useState([]);
+    const [textContent, setTextContent] = useState("");
+    const [success, setSuccess] = useState("");
 
     function startNotpadFileMenu() {
         setFileMenuOpen(!fileMenuOpen);
     }
 
-    function handleOpenFile() {
-        setShowFileSelector(true);
+    const handleOpenFileOuter = async (e) => {
+        e.preventDefault();
+
+        try {
+            const res = await fetch("/api/notepads", {method: "GET"});
+
+            if (!res.ok) {
+                const msg = await res.text();
+                throw new Error(msg || "Fetching notepads failed");
+            }
+
+            const data = await res.json();
+            setNotepads(data);
+            setShowFileSelector(true);
+        } catch (err) {
+            console.error("Failed to fetch notepads:", err);
+            setError(err.message || "An error occurred while fetching notepads");
+        }
+
         setFileMenuOpen(false);
-    }
+    };
 
     const handleClickSaveFile = async (e) => {
         e.preventDefault();
         const userString = localStorage.getItem("user");
-
         const user = JSON.parse(userString);
         const userId = user.user_id;
-        const currentTime = new Date().toLocaleTimeString();
-        const LastEdited = new Date().toLocaleTimeString();
+        const currentTime = new Date().toISOString();
         const notepadContend = document.getElementById("notepad-text-area").value;
 
         try {
@@ -101,7 +147,6 @@ export default function Notepad({onClose}) {
                     user_id: userId,
                     saved_text: notepadContend,
                     created: currentTime,
-                    last_edited: LastEdited
                 })
             });
 
@@ -109,8 +154,12 @@ export default function Notepad({onClose}) {
                 const msg = await res.text();
                 throw new Error(msg.message || "Saving failed");
             }
+            setSuccess("Success");
+            setError("");
+            setTimeout(() => setSuccess(""), 3000);
         } catch (err) {
             setError(err.message || "An error occurred during Saving");
+            setSuccess("");
         }
     };
 
@@ -139,6 +188,9 @@ export default function Notepad({onClose}) {
                         <div className="statusbar" style={{position: 'relative'}}>
                             <button className="notepad-file-help-button" onClick={startNotpadFileMenu}>File</button>
                             <button className="notepad-file-help-button">Help</button>
+
+                            {success && <span style={{color: 'green', fontSize: '12px'}}>{success}</span>}
+                            {error && <span style={{color: 'red', fontSize: '12px'}}>{error}</span>}
                             {fileMenuOpen && (
                                 <div className="window-body" style={{
                                     padding: 0,
@@ -146,15 +198,20 @@ export default function Notepad({onClose}) {
                                 }}>
                                     <div className="menu">
                                         <div className="menu-item" onClick={handleClickSaveFile}>Save File</div>
-                                        <div className="menu-item" onClick={handleOpenFile}>Open File</div>
+                                        <div className="menu-item" onClick={handleOpenFileOuter}>Open File</div>
                                     </div>
                                 </div>
                             )}
 
                         </div>
 
-                        <textarea className="notepad-text-area" id="notepad-text-area"
-                                  style={{width: "300px", height: "300px"}}/>
+                        <textarea
+                            className="notepad-text-area"
+                            id="notepad-text-area"
+                            style={{width: "300px", height: "300px"}}
+                            value={textContent}
+                            onChange={(e) => setTextContent(e.target.value)}
+                        />
 
                     </div>
 
@@ -163,7 +220,10 @@ export default function Notepad({onClose}) {
 
             </DraggableWindow>
             {showFileSelector && (
-                <FileSelector onClose={() => setShowFileSelector(false)}/>
+                <FileSelector onClose={() => setShowFileSelector(false)}
+                              notepads={notepads}
+                              setTextContent={setTextContent}
+                />
             )}
 
 

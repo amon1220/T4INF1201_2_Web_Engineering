@@ -18,4 +18,3 @@ class Notepad(Base):
     user_id = Column(ForeignKey('users.user_id'))
     saved_text = Column(String)
     created = Column(String)
-    last_edited = Column(String)
