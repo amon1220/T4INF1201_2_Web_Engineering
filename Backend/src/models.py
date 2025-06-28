@@ -17,5 +17,5 @@ class Notepad(Base):
     notepad_id = Column(Integer, primary_key=True, autoincrement=True)
     user_id = Column(ForeignKey('users.user_id'))
     saved_text = Column(String)
-    created = Column(Integer)
-    last_edited = Column(Integer)
+    created = Column(String)
+    last_edited = Column(String)

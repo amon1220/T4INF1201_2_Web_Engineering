@@ -158,6 +158,14 @@ def delete_user(user_id):
 
 @api.route('/notepads')
 def get_notepads():
+    """
+    GET /notepads
+
+    Get all notepads.
+
+    Returns:
+        JSON: List of all notepads.
+    """
     with create_session() as session:
         notepads = session.query(Notepad).all()
 
@@ -170,15 +178,20 @@ def get_notepads():
         } for n in notepads])
 
 
-@api.route('/notepads/<int:user_id>', methods=['GET'])
+@api.route('/notepads/fromUser/<int:user_id>', methods=['GET'])
 def get_user_notepads(user_id):
     """
-    GET /notepads
+    GET /notepads/fromUser/<int:user_id>
 
-    Get all notepads.
+    Get a all notepad that are associated with the user.
+
+    Args:
+        user_id (int): id of the user the notepads belongs to.
 
     Returns:
-        JSON: List of all notepads.
+        JSON: List of notepads and teir data.
+    Raises:
+        404: If the user doesn´t exist.
     """
     with create_session() as session:
         user = session.get(User, user_id)
@@ -227,6 +240,7 @@ def get_notepad(notepad_id):
         return abort(404, "Notepad not found")
 
 
+# the name is kid of misleading "file" would be better
 @api.route('/notepad', methods=['POST'])
 def create_notepad():
     """
@@ -236,6 +250,7 @@ def create_notepad():
 
     Request JSON:
         {
+            "user_id": int,
             "saved_text": str,
             "created": str,
             "last_edited": str
@@ -247,11 +262,14 @@ def create_notepad():
         400: If required fields are missing.
     """
     data = request.json
-    if not all(k in data for k in ('saved_text', 'created', 'last_edited')):
-        return abort(400, "Missing fields")
+    required_fields = ('user_id', 'saved_text', 'created', 'last_edited')
+    missing = [k for k in required_fields if k not in data]
+    if missing:
+        return abort(400, f"Missing fields: {', '.join(missing)}")
 
     with create_session() as session:
         new_notepad = Notepad(
+            user_id=data['user_id'],
             saved_text=data['saved_text'],
             created=data['created'],
             last_edited=data['last_edited']
@@ -261,6 +279,7 @@ def create_notepad():
         return jsonify({'message': 'Notepad created', 'notepad_id': new_notepad.notepad_id}), 201
 
 
+#we can argue if there is a reason to offer created but I just leave it
 @api.route('/notepad/<int:notepad_id>', methods=['PUT'])
 def update_notepad(notepad_id):
     """
@@ -318,8 +337,7 @@ def delete_notepad(notepad_id):
         return jsonify({'message': 'Notepad deleted'}),
 
 
-# the name is kid of misleading "file" would be better
-@api.route('/login', methods=['POST'])
+@api.route('login', methods=['POST'])
 def login():
     data = request.json
     username = data.get('username')
