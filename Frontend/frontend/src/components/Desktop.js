@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import "../App.css"
 import Taskbar from "./taskbar";
 import RecycleBinButton from "./RecycleBinButton";
@@ -22,6 +22,14 @@ function Desktop() {
     const [weatherAppOpen, setWeatherAppOpen] = useState(false);
     const [startWindowOpen, setStartWindowOpen] = useState(false);
     //SPA Frontend of Desktop starts here, cant write comments inside of return statements, this just opens up each Pop-up by the OnClick determined in every component file
+    useEffect(() => {
+        const audio = new Audio("/Microsoft_Windows_95_Startup_Sound.mp3");
+        audio.play().catch(e => {
+            // Some browsers block autoplay
+            console.warn("Autoplay failed:", e);
+        });
+    }, []);
+
     return (
         <div className="desktop">
             <Taskbar
