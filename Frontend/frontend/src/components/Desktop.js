@@ -21,12 +21,19 @@ function Desktop() {
     const [myComputerOpen, setMyComputerOpen] = useState(false);
     const [weatherAppOpen, setWeatherAppOpen] = useState(false);
     const [startWindowOpen, setStartWindowOpen] = useState(false);
-    //SPA Frontend of Desktop starts here, cant write comments inside of return statements, this just opens up each Pop-up by the OnClick determined in every component file
+    //SPA Frontend of Desktop starts here, cant write comments inside of return statements,
+    // this just opens up each Pop-up by the OnClick determined in every component file
+
+    /**
+     * When this site is loaded:
+     * Attempts to play the Windows 95 startup sound.
+     * If autoplay is blocked log it.
+     */
     useEffect(() => {
         const audio = new Audio("/Microsoft_Windows_95_Startup_Sound.mp3");
         audio.play().catch(e => {
             // Some browsers block autoplay
-            console.warn("Autoplay failed:", e);
+            console.log("Autoplay failed:", e);
         });
     }, []);
 

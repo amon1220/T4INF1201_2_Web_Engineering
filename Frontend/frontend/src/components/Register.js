@@ -2,11 +2,6 @@ import React, {useState} from "react";
 import "../App.css";
 import {useNavigate} from "react-router-dom";
 
-/**
- * This function defines the Register site
- *
- * @returns Html code for the Register site
- */
 export default function Register() {
     const navigate = useNavigate();
     const [username, setUsername] = useState("");
@@ -14,7 +9,6 @@ export default function Register() {
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
 
-    //I know both do the same but the lower one still has to get logic
     const handleClickBack = () => {
         navigate('/Login');
     };

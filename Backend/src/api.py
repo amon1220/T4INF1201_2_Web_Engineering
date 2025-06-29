@@ -182,7 +182,7 @@ def get_user_notepads(user_id):
     """
     GET /notepads/fromUser/<int:user_id>
 
-    Get a all notepad that are associated with the user.
+    Get all notepad that are associated with the user.
 
     Args:
         user_id (int): id of the user the notepads belongs to.

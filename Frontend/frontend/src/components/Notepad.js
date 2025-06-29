@@ -8,7 +8,17 @@ export function FileSelector({onClose, notepads, setTextContent}) {
     const [error, setError] = useState("");
     const tableRef = useRef(null);
 
-    useEffect(() => { //BE CAREFUL WHEN LETTING THIS FUNCTION SET AN ERROR idk why i cant do it in the first line, too bad
+    /**
+     * When the FileSelector is loaded:
+     * Gets the table. Defines a function that, when something in the table is
+     * clicked it looks witch row in <tbody> it is and saves it in SelectedRowIndex.
+     * Removes all errors (when the user clicks open before selecting the error would stick around otherwise)
+     * Adds the function to the table.
+     * Cleans Up.
+     */
+    //BE CAREFUL WHEN LETTING THIS FUNCTION SET AN ERROR idk why I cant do it in the first line,
+    // had to be at the end, too bad
+    useEffect(() => {
         const table = tableRef.current;
         if (!table) return;
 
@@ -28,6 +38,10 @@ export function FileSelector({onClose, notepads, setTextContent}) {
         return () => table.removeEventListener('click', handleClick);
     }, []);
 
+    /**
+     * Sets the text in the Notepad textarea to the saved text from the selected notepad.
+     *
+     */
     const handleOpenFileInner = () => {
         if (selectedRowIndex !== null) {
             const selectedNotepad = notepads[selectedRowIndex];
@@ -40,10 +54,23 @@ export function FileSelector({onClose, notepads, setTextContent}) {
         }
     };
 
+    /**
+     * turns a string like "something something" to "some..." when max length is 7
+     *
+     * @param {String} str Any string
+     * @param {integer} maxLength Any number
+     * @returns {String} The string cut off after maxLength symbols but also with the last 3 replaced with ...
+     */
     function truncate(str, maxLength) {
         return str.length > maxLength ? str.slice(0, maxLength - 3) + '...' : str;
     }
 
+    /**
+     * Formats new Date().toISOString() objects in the format HH:SS DD/MM/YYYY
+     *
+     * @param {String} isoString ISO 8601 date-time string
+     * @returns {String}
+     */
     function formatDateTime(isoString) {
         const date = new Date(isoString);
         const time = date.toLocaleTimeString('en-GB', {hour12: false});
@@ -109,11 +136,21 @@ export default function Notepad({onClose}) {
         setFileMenuOpen(!fileMenuOpen);
     }
 
+    /**
+     * Trys to get all notepads from the logged-in user
+     * then saves them and calls shows the file selector.
+     *
+     * @param {Event} e - The button submission event.
+     * @returns {Promise<void>}
+     */
     const handleOpenFileOuter = async (e) => {
         e.preventDefault();
+        const userString = localStorage.getItem("user");
+        const user = JSON.parse(userString);
+        const userId = user.user_id;
 
         try {
-            const res = await fetch("/api/notepads", {method: "GET"});
+            const res = await fetch("/api/notepads/fromUser/" + userId, {method: "GET"});
 
             if (!res.ok) {
                 const msg = await res.text();
@@ -131,6 +168,14 @@ export default function Notepad({onClose}) {
         setFileMenuOpen(false);
     };
 
+    /**
+     * Collects all relevant data and trys to post it to the api.
+     * Gives apropriate response to the user on success and failure
+     *
+     *
+     * @param {Event} e - The button submission event.
+     * @returns {Promise<void>}
+     */
     const handleClickSaveFile = async (e) => {
         e.preventDefault();
         const userString = localStorage.getItem("user");
@@ -163,7 +208,8 @@ export default function Notepad({onClose}) {
         }
     };
 
-    // <statusbar style={{position: 'relative'}}> gave an error but <div className="statusbar" style={{position: 'relative'}}> seems to work the same
+    // <statusbar style={{position: 'relative'}}> gave an error but
+    // <div className="statusbar" style={{position: 'relative'}}> seems to work the same
     return (
         <>
             <DraggableWindow initialPosition={{x: 200, y: 100}} handleSelector=".title-bar">

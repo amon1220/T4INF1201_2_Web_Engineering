@@ -10,6 +10,14 @@ export default function Login() {
     const routerLocation = useLocation();
     const from = routerLocation.state?.from?.pathname || "/Desktop";
 
+    /**
+     * When this site is loaded:
+     * Defines a function that trys to play an empty sound and ignores all errors.
+     * this function is called when the user clicks anywhere on the site,
+     * the purpose is to let the user accept audio (browser prompt)
+     * so later the startup sound can get played.
+     * At the end cleans up.
+     */
     useEffect(() => {
         const unlockAudio = () => {
             const emptyAudio = new Audio();
