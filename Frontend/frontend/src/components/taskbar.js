@@ -7,13 +7,14 @@ import {useNavigate} from "react-router-dom";
 import shutdownIcon from '../assets/shut_down_normal-3.png';
 import LogoutIcon from '../assets/key_win-0.png';
 import SettingsIcon from '../assets/settings_gear_cool-4.png';
+import ChangePassword from "./ChangePassword";
 
 export default function Taskbar({openWindows, onWindowClick}) {
     const [isStartMenuOpen, setIsStartMenuOpen] = useState(false);
     const navigate = useNavigate();
 
     const handleChangePassword = () => {
-        navigate('/ChangePassword');
+        ChangePassword();
     };
 
     const handleLogout = () => {

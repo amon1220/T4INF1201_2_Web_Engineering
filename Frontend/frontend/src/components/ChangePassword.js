@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import "../App.css";
 import {useNavigate} from 'react-router-dom';
 
@@ -9,14 +9,49 @@ import {useNavigate} from 'react-router-dom';
  */
 export default function ChangePassword() {
     const navigate = useNavigate();
+    const [oldPassword, setOldPassword] = useState("");
+    const [newPassword, setNewPassword] = useState("");
+    const [confirmPassword, setConfirmPassword] = useState("");
+    const [error, setError] = useState("");
 
     const handleClickBack = () => {
         navigate('/Desktop');
     };
 
-    const handleClickOk = () => {
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        const user_id = JSON.parse(localStorage.getItem("user")).id;
+
+        if (newPassword !== confirmPassword) {
+            setError("Passwords do not match");
+            return;
+        }
+
+        try {
+            const res = await fetch("/api/change_pw", {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({user_id, oldPassword, newPassword})
+            });
+
+            if (!res.ok) {
+            const contentType = res.headers.get("Content-Type") || "";
+            let errMsg;
+            if (contentType.includes("application/json")) {
+                const {message} = await res.json();
+                errMsg = message;
+            } else {
+                errMsg = await res.text();
+            }
+            throw new Error(errMsg || "Change password failed");
+        }
+        } catch (err) {
+            setError(err.message || "Error");
+            return;
+        }
+
         navigate('/Desktop');
-    };
+    }
 
     return (
         <div className="desktop">
@@ -40,45 +75,45 @@ export default function ChangePassword() {
                     </div>
                 </div>
 
-                <div
+                <form
+                    onSubmit={handleSubmit}
                     className="window-body"
                     style={{
                         display: "grid",
                         gridTemplateColumns: "auto 1fr auto",
-                        gridTemplateRows: "auto auto",
+                        gridTemplateRows: "auto auto auto",
                         gap: "10px",
                         padding: "10px",
-                        alignItems: "start"
+                        alignItems: "start",
                     }}
                 >
                     <img
                         src={require("../assets/key_win_alt-2.png")}
                         alt="key icon"
-                        style={{width: "40px", height: "40px", gridColumn: "1", gridRow: "1 / span 2"}}
+                        style={{
+                            width: "40px", height: "40px", gridColumn: "1", gridRow: "1 / span 3",
+                        }}
                     />
 
-                    <p style={{margin: 5, whiteSpace: "nowrap", gridColumn: "2", gridRow: "1"}}>
+                    <p
+                        style={{
+                            margin: 5, whiteSpace: "nowrap", gridColumn: "2", gridRow: "1",
+                        }}
+                    >
                         Change password for Windows
                     </p>
 
+                    {/* Buttons */}
                     <div
                         style={{
-                            display: "flex",
-                            gridColumn: "3",
-                            gridRow: "1",
-                            justifyContent: "flex-end"
+                            display: "flex", gridColumn: "3", gridRow: "1", justifyContent: "flex-end",
                         }}
                     >
-                        <button type="button" onClick={handleClickOk}>
-                            OK
-                        </button>
+                        <button type="submit">OK</button>
                     </div>
                     <div
                         style={{
-                            display: "flex",
-                            gridColumn: "3",
-                            gridRow: "2",
-                            justifyContent: "flex-end"
+                            display: "flex", gridColumn: "3", gridRow: "2", justifyContent: "flex-end",
                         }}
                     >
                         <button type="button" onClick={handleClickBack}>
@@ -86,38 +121,58 @@ export default function ChangePassword() {
                         </button>
                     </div>
 
-                    <form
+                    {/* Form fields */}
+                    <div
                         style={{
                             display: "flex",
                             flexDirection: "column",
                             gap: "8px",
                             gridColumn: "2",
-                            gridRow: "3"
+                            gridRow: "2 / span 2",
                         }}
                     >
-                        <div style={{display: "flex", alignItems: "center", fontSize: "13px"}}>
-                            <label style={{minWidth: "80px", marginRight: "8px", color: "black"}}>
-                                <span style={{textDecoration: "underline", color: "black"}}>O</span>ld Password:
+                        {error && (<div style={{color: "red", fontSize: "13px"}}>{error}</div>)}
+
+                        <div style={{display: "flex", alignItems: "center", fontSize: 13}}>
+                            <label style={{minWidth: 80, marginRight: 8}}>
+                                <span style={{textDecoration: "underline"}}>O</span>ld Password:
                             </label>
-                            <input type="text" style={{flex: 1}}/>
+                            <input
+                                type="password"
+                                value={oldPassword}
+                                onChange={(e) => setOldPassword(e.target.value)}
+                                style={{flex: 1}}
+                                required
+                            />
                         </div>
 
-                        <div style={{display: "flex", alignItems: "center", fontSize: "13px"}}>
-                            <label style={{minWidth: "80px", marginRight: "8px", color: "black"}}>
-                                <span style={{textDecoration: "underline", color: "black"}}>N</span>ew Password:
+                        <div style={{display: "flex", alignItems: "center", fontSize: 13}}>
+                            <label style={{minWidth: 80, marginRight: 8}}>
+                                <span style={{textDecoration: "underline"}}>N</span>ew Password:
                             </label>
-                            <input type="password" style={{flex: 1}}/>
+                            <input
+                                type="password"
+                                value={newPassword}
+                                onChange={(e) => setNewPassword(e.target.value)}
+                                style={{flex: 1}}
+                                required
+                            />
                         </div>
 
-                        <div style={{display: "flex", alignItems: "center", fontSize: "13px"}}>
-                            <label style={{minWidth: "80px", marginRight: "8px", color: "black"}}>
-                                <span style={{textDecoration: "underline", color: "black"}}>C</span>onfirm Password:
+                        <div style={{display: "flex", alignItems: "center", fontSize: 13}}>
+                            <label style={{minWidth: 80, marginRight: 8}}>
+                                <span style={{textDecoration: "underline"}}>C</span>onfirm Password:
                             </label>
-                            <input type="password" style={{flex: 1}}/>
+                            <input
+                                type="password"
+                                value={confirmPassword}
+                                onChange={(e) => setConfirmPassword(e.target.value)}
+                                style={{flex: 1}}
+                                required
+                            />
                         </div>
-                    </form>
-                </div>
+                    </div>
+                </form>
             </div>
-        </div>
-    );
+        </div>);
 }

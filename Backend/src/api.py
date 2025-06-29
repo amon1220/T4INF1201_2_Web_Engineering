@@ -380,3 +380,22 @@ def register():
                 'email': new_user.email
             }
         }), 200
+
+@api.route('/api/change_pw', methods=['POST'])
+def change_pw():
+    data = request.json
+    user_id = data.get('user_id')
+    old_password = data.get('old_password')
+    new_password = data.get('new_password')
+
+    if not all([user_id, old_password, new_password]):
+        return jsonify({'message': 'Missing Fields'}), 400
+
+    with create_session() as session:
+        user = session.get(User, user_id)
+        if not user or not check_password_hash(user.password, old_password):
+            return jsonify({'message': 'Invalid credentials'}), 401
+
+        user.password = generate_password_hash(new_password)
+        session.commit()
+        return jsonify({'message': 'Password changed successfully'}), 200
