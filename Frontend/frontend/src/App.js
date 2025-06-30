@@ -23,7 +23,11 @@ function App() {
                 }/>
                 <Route path="/Login" element={<Login/>}/>
                 <Route path="/Register" element={<Register/>}/>
-                <Route path="/ChangePassword" element={<ChangePassword/>}/>
+                <Route path="/ChangePassword" element={
+                    <RequireAuth>
+                        <ChangePassword/>
+                    </RequireAuth>
+                }/>
                 <Route path="*" element={<Navigate to="/Login" replace/>}/>
             </Routes>
         </Router>

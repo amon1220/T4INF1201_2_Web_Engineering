@@ -14,7 +14,7 @@ export default function Taskbar({openWindows, onWindowClick}) {
     const navigate = useNavigate();
 
     const handleChangePassword = () => {
-        ChangePassword();
+        navigate('/ChangePassword');
     };
 
     const handleLogout = () => {

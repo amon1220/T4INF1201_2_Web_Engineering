@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify, abort
 from Backend.src.models import *
-from Backend.src.methods import create_session
+from Backend.src.methods import create_session, password_policy
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_jwt_extended import create_access_token
 
@@ -381,15 +381,18 @@ def register():
             }
         }), 200
 
-@api.route('/api/change_pw', methods=['POST'])
+@api.route('/change_pw', methods=['POST'])
 def change_pw():
     data = request.json
     user_id = data.get('user_id')
-    old_password = data.get('old_password')
-    new_password = data.get('new_password')
+    old_password = data.get('oldPassword')
+    new_password = data.get('newPassword')
 
     if not all([user_id, old_password, new_password]):
         return jsonify({'message': 'Missing Fields'}), 400
+
+    if not password_policy(new_password):
+        return jsonify({'message': 'Password does not meet requirements'}), 400
 
     with create_session() as session:
         user = session.get(User, user_id)

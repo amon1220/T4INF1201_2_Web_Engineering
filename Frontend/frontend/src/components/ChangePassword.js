@@ -20,36 +20,36 @@ export default function ChangePassword() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const user_id = JSON.parse(localStorage.getItem("user")).id;
+        const { user_id } = JSON.parse(localStorage.getItem("user")) || {};
+
 
         if (newPassword !== confirmPassword) {
             setError("Passwords do not match");
             return;
-        }
+        } else {
+            try {
+                const res = await fetch("/api/change_pw", {
+                    method: "POST",
+                    headers: {"Content-Type": "application/json"},
+                    body: JSON.stringify({user_id, oldPassword, newPassword})
+                });
 
-        try {
-            const res = await fetch("/api/change_pw", {
-                method: "POST",
-                headers: {"Content-Type": "application/json"},
-                body: JSON.stringify({user_id, oldPassword, newPassword})
-            });
-
-            if (!res.ok) {
-            const contentType = res.headers.get("Content-Type") || "";
-            let errMsg;
-            if (contentType.includes("application/json")) {
-                const {message} = await res.json();
-                errMsg = message;
-            } else {
-                errMsg = await res.text();
+                if (!res.ok) {
+                    const contentType = res.headers.get("Content-Type") || "";
+                    let errMsg;
+                    if (contentType.includes("application/json")) {
+                        const {message} = await res.json();
+                        errMsg = message;
+                    } else {
+                        errMsg = await res.text();
+                    }
+                    throw new Error(errMsg || "Change password failed");
+                }
+            } catch (err) {
+                setError(err.message || "Error");
+                return;
             }
-            throw new Error(errMsg || "Change password failed");
         }
-        } catch (err) {
-            setError(err.message || "Error");
-            return;
-        }
-
         navigate('/Desktop');
     }
 
