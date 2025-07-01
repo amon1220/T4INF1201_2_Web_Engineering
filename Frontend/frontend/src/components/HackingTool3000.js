@@ -30,8 +30,6 @@ export default function HackingTool3000({ onClose }) {
             </div>
 
 
-
-
             <div className="window-body" style={{
                 padding: 0,
                 margin: 0,
@@ -40,11 +38,7 @@ export default function HackingTool3000({ onClose }) {
             }}>
                 {/* Matrix Regen Animation */}
                 <MatrixRain/>
-
-
-
             </div>
-
 
         </div>
 
@@ -55,11 +49,10 @@ export default function HackingTool3000({ onClose }) {
 
 /**
  * React component for showing the matrix rain on the screen
- * Inspiration/Source: https://www.youtube.com/watch?v=y4K_5CVz7Cs
+ * Inspiration/source: https://www.youtube.com/watch?v=y4K_5CVz7Cs
  */
 
 export function MatrixRain() {
-    // https://www.youtube.com/watch?v=y4K_5CVz7Cs
     const canvasRef = useRef(null);
 
     useEffect(() => {
@@ -85,14 +78,14 @@ export function MatrixRain() {
         }
 
         function draw() {
-            context.fillStyle = 'rgba(0, 0, 0, 0.05)';
-            context.fillRect(0, 0, canvas.width, canvas.height);
+            context.fillStyle = 'rgba(0, 0, 0, 0.05)'; // set black transparant overlay for each round
+            context.fillRect(0, 0, canvas.width, canvas.height); // // Draw a transparant rectangle over the entire hackingtool window, so the previous frames fade slowly
 
             // green
             context.fillStyle = '#0F0';
             context.font = fontSize;
 
-            // go through rainDrop array
+            // go through rainDrop array, draw characters for each column
             for (let i = 0; i < rainDrops.length; i++) {
                 // Random letters from Alphabet and draw it on the screen (text, x, y). Multply necessary to get spacing
                 const text = alphabet.charAt(Math.floor(Math.random() * alphabet.length));
