@@ -3,6 +3,14 @@ import "../App.css";
 import '98.css';
 import DraggableWindow from "./draggableWindow.js";
 
+
+/**
+ * This function is for the Filetable, where you can select Textfiles.
+ * @param onClose function to be called when the window is closed
+ * @param notepads List of notepad objects to display in the table.
+ * @param setTextContent updates the textarea with the test of the selected file
+ * @returns {JSX.Element} returns the rendering table
+ */
 export function FileSelector({onClose, notepads, setTextContent}) {
     const [selectedRowIndex, setSelectedRowIndex] = useState(null);
     const [error, setError] = useState("");
@@ -123,6 +131,15 @@ export function FileSelector({onClose, notepads, setTextContent}) {
 }
 
 
+/**
+ * This function represent the Notepad, where you can type Notes.
+ * The buttons File opens the menu to the buttons Save File and Open File.
+ * Save File: Current text is saved.
+ * Open File: Opens a Table, where you can selected saved Files.
+ * @param onClose
+ * @returns {JSX.Element}
+ */
+
 export default function Notepad({onClose}) {
     // Defintionen für das Filemenü
     const [fileMenuOpen, setFileMenuOpen] = useState(false);
@@ -210,6 +227,7 @@ export default function Notepad({onClose}) {
 
     // <statusbar style={{position: 'relative'}}> gave an error but
     // <div className="statusbar" style={{position: 'relative'}}> seems to work the same
+    // Rendering of the Notepad and menus
     return (
         <>
             <DraggableWindow initialPosition={{x: 200, y: 100}} handleSelector=".title-bar">
