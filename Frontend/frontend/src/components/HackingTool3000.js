@@ -1,4 +1,5 @@
-import React from "react";
+//import React from "react";
+import React, { useRef, useEffect } from "react";
 import "../App.css";
 import DraggableWindow from "./draggableWindow.js";
 
@@ -10,7 +11,7 @@ import DraggableWindow from "./draggableWindow.js";
  */
 export default function HackingTool3000({ onClose }) {
     return (
-        <DraggableWindow initialPosition={{ x: 200, y: 100 }} handleSelector=".title-bar">
+            <DraggableWindow initialPosition={{ x: 400, y: 300 }} handleSelector=".title-bar">
         <div className="window"
              style={{
                  position: "absolute",
@@ -37,9 +38,8 @@ export default function HackingTool3000({ onClose }) {
                 display: "flex",
                 flexDirection: "column"
             }}>
-                <div className="status-bar">
-
-                </div>
+                {/* Matrix Regen Animation */}
+                <MatrixRain/>
 
 
 
@@ -51,7 +51,76 @@ export default function HackingTool3000({ onClose }) {
         </DraggableWindow>
     );
 
+}
 
+/**
+ * React component for showing the matrix rain on the screen
+ * Inspiration/Source: https://www.youtube.com/watch?v=y4K_5CVz7Cs
+ */
 
+export function MatrixRain() {
+    // https://www.youtube.com/watch?v=y4K_5CVz7Cs
+    const canvasRef = useRef(null);
 
+    useEffect(() => {
+        const canvas = canvasRef.current; // get Canvas Object
+        const context = canvas.getContext('2d');
+
+        // Größe setzen
+        canvas.width = 400;
+        canvas.height = 300;
+
+        const katakana = 'アァカサタナハマヤャラワガザダバパイィキシチニヒミリヰギジヂビピウゥクスツヌフムユュルグズブヅプエェケセテネヘメレヱゲゼデベペオォコソトノホモヨョロヲゴゾドボポヴッン';
+        const latin = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        const nums = '0123456789';
+        const alphabet = katakana + latin + nums;
+
+        const fontSize = 16;
+        const columns = Math.floor(canvas.width / fontSize);
+
+        // Calculate how many can fit on the screen horizontially
+        const rainDrops = [];
+        for (let x = 0; x < columns; x++) {
+            rainDrops[x] = 1;
+        }
+
+        function draw() {
+            context.fillStyle = 'rgba(0, 0, 0, 0.05)';
+            context.fillRect(0, 0, canvas.width, canvas.height);
+
+            // green
+            context.fillStyle = '#0F0';
+            context.font = fontSize;
+
+            // go through rainDrop array
+            for (let i = 0; i < rainDrops.length; i++) {
+                // Random letters from Alphabet and draw it on the screen (text, x, y). Multply necessary to get spacing
+                const text = alphabet.charAt(Math.floor(Math.random() * alphabet.length));
+                context.fillText(text, i * fontSize, rainDrops[i] * fontSize);
+
+                // if text crossed border, return to the top of the screen
+                if (rainDrops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                    rainDrops[i] = 0;
+                }
+                rainDrops[i]++;
+            }
+        }
+
+        const intervalId = setInterval(draw, 30);
+
+        // Clean up beim Unmount
+        return () => clearInterval(intervalId);
+    }, []);
+
+    return (
+        <canvas
+            ref={canvasRef}
+            style={{
+                background: "black",
+                display: "block",
+                margin: "auto",
+                borderRadius: "8px"
+            }}
+        />
+    );
 }
