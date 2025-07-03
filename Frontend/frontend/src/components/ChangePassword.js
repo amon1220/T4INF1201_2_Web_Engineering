@@ -135,7 +135,7 @@ export default function ChangePassword() {
 
                         <div style={{display: "flex", alignItems: "center", fontSize: 13}}>
                             <label style={{minWidth: 80, marginRight: 8}}>
-                                <span style={{textDecoration: "underline"}}>O</span>ld Password:
+                                <span style={{textDecoration: "underline", color: "black"}}>O</span>ld Password:
                             </label>
                             <input
                                 type="password"
@@ -148,7 +148,7 @@ export default function ChangePassword() {
 
                         <div style={{display: "flex", alignItems: "center", fontSize: 13}}>
                             <label style={{minWidth: 80, marginRight: 8}}>
-                                <span style={{textDecoration: "underline"}}>N</span>ew Password:
+                                <span style={{textDecoration: "underline", color: "black"}}>N</span>ew Password:
                             </label>
                             <input
                                 type="password"
@@ -161,7 +161,7 @@ export default function ChangePassword() {
 
                         <div style={{display: "flex", alignItems: "center", fontSize: 13}}>
                             <label style={{minWidth: 80, marginRight: 8}}>
-                                <span style={{textDecoration: "underline"}}>C</span>onfirm Password:
+                                <span style={{textDecoration: "underline", color: "black"}}>C</span>onfirm Password:
                             </label>
                             <input
                                 type="password"
