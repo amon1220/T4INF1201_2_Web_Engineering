@@ -62,7 +62,16 @@ export function FileSelector({onClose, notepads, setTextContent, setNotepads}) {
         }
     };
 
-    const handleDeleteFileInner = async () => {
+    /**
+     * Deletes the selected notepad from the database with a api call.
+     * On success, removes the deleted notepad from the local state and clears the selection.
+     * On failure, shows an error message. (hopefully will never happen because the error does not format html)
+     *
+     * @returns {Promise<void>}
+     * @param {Event} e - The button submission event.
+     */
+    const handleDeleteFileInner = async (e) => {
+        e.preventDefault()
         if (selectedRowIndex !== null) {
             const selectedNotepad = notepads[selectedRowIndex];
 
@@ -167,6 +176,7 @@ export function FileSelector({onClose, notepads, setTextContent, setNotepads}) {
  * The buttons File opens the menu to the buttons Save File and Open File.
  * Save File: Current text is saved.
  * Open File: Opens a Table, where you can selected saved Files.
+ *
  * @param onClose
  * @returns {JSX.Element}
  */
