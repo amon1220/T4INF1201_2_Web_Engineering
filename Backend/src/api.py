@@ -327,7 +327,7 @@ def delete_notepad(notepad_id):
 
         session.delete(notepad)
         session.commit()
-        return jsonify({'message': 'Notepad deleted'}),
+        return jsonify({'message': 'Notepad deleted'}), 200
 
 
 @api.route('login', methods=['POST'])

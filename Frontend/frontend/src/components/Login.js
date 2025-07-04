@@ -17,6 +17,8 @@ export default function Login() {
      * the purpose is to let the user accept audio (browser prompt)
      * so later the startup sound can get played.
      * At the end cleans up.
+     *
+     * untested might be useless
      */
     useEffect(() => {
         const unlockAudio = () => {

@@ -11,7 +11,7 @@ import DraggableWindow from "./draggableWindow.js";
  * @param setTextContent updates the textarea with the test of the selected file
  * @returns {JSX.Element} returns the rendering table
  */
-export function FileSelector({onClose, notepads, setTextContent}) {
+export function FileSelector({onClose, notepads, setTextContent, setNotepads}) {
     const [selectedRowIndex, setSelectedRowIndex] = useState(null);
     const [error, setError] = useState("");
     const tableRef = useRef(null);
@@ -61,6 +61,36 @@ export function FileSelector({onClose, notepads, setTextContent}) {
             setError("Please select a file first.");
         }
     };
+
+    const handleDeleteFileInner = async () => {
+        if (selectedRowIndex !== null) {
+            const selectedNotepad = notepads[selectedRowIndex];
+
+            try {
+                const res = await fetch("/api/notepad/" + selectedNotepad.notepad_id, {method: "DELETE"});
+
+                if (!res.ok) {
+                    const msg = await res.text();
+                    throw new Error(msg || "Deleting notepad failed");
+                }
+
+                setNotepads((prevNotepads) =>
+                    prevNotepads.filter((_, index) => index !== selectedRowIndex)
+                );
+
+                setSelectedRowIndex(null); // Clear selection after deletion
+
+            } catch (err) {
+                console.error("Failed to fetch notepads:", err);
+                setError(err.message || "An error occurred while Deleting notepads");
+            }
+
+
+        } else {
+            setError("Please select a file first.");
+        }
+    };
+
 
     /**
      * turns a string like "something something" to "some..." when max length is 7
@@ -122,6 +152,7 @@ export function FileSelector({onClose, notepads, setTextContent}) {
                     <div className="field-row" style={{justifyContent: "flex-end", padding: "10px"}}>
                         <div style={{color: "red", fontSize: "12px"}}>{error}</div>
                         <button onClick={handleOpenFileInner}>Open</button>
+                        <button onClick={handleDeleteFileInner}>Delete</button>
                         <button onClick={onClose}>Cancel</button>
                     </div>
                 </div>
@@ -287,6 +318,7 @@ export default function Notepad({onClose}) {
                 <FileSelector onClose={() => setShowFileSelector(false)}
                               notepads={notepads}
                               setTextContent={setTextContent}
+                              setNotepads={setNotepads}
                 />
             )}
 
