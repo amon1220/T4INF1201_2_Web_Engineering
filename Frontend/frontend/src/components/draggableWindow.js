@@ -15,7 +15,7 @@ export default function DraggableWindow({ children, initialPosition = { x: 100, 
 
     // Capture the Mouse pointer, record click offset, and start dragging
     const onPointerDown = useCallback((e) => {
-        if (handleSelector && !e.target.closest(handleSelector)) return;
+        if ((handleSelector && !e.target.closest(handleSelector)) || e.target.closest('button, input, a, [role="button"]')) return;
         const el = e.currentTarget;
         el.setPointerCapture(e.pointerId);
         setOffset({x: e.clientX - position.x, y: e.clientY - position.y});
