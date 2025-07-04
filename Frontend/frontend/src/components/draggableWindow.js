@@ -1,4 +1,4 @@
-import {useState} from "react";
+import {useState, useCallback} from "react";
 
 /**
  * Draggablewindow is used to drag components on the main screen
@@ -13,41 +13,36 @@ export default function DraggableWindow({ children, initialPosition = { x: 100, 
   const [isDragging, setIsDragging] = useState(false);
   const [offset, setOffset] = useState({ x: 0, y: 0 });
 
-  //If mouse is clicked, set dragging true and set where your Mouse clicked the component
-  const handleMouseDown = (e) => {
-    if (handleSelector && !e.target.closest(handleSelector)) return;
-    setIsDragging(true);
-    setOffset({
-      x: e.clientX - position.x,
-      y: e.clientY - position.y,
-    });
-  };
- //If dragging is stopped, set new position
-  const handleMouseMove = (e) => {
-    if (!isDragging) return;
-    setPosition({
-      x: e.clientX - offset.x,
-      y: e.clientY - offset.y,
-    });
-  };
-    //If mouse click is released, set dragging to false
-  const handleMouseUp = () => setIsDragging(false);
+    // Capture the Mouse pointer, record click offset, and start dragging
+    const onPointerDown = useCallback((e) => {
+        if (handleSelector && !e.target.closest(handleSelector)) return;
+        const el = e.currentTarget;
+        el.setPointerCapture(e.pointerId);
+        setOffset({x: e.clientX - position.x, y: e.clientY - position.y});
+        setIsDragging(true);
+    }, [handleSelector, position]);
 
-    return (
-        <div
-            onMouseDown={handleMouseDown}
-            onMouseMove={handleMouseMove}
-            onMouseUp={handleMouseUp}
-            onMouseLeave={handleMouseUp}
-            style={{
-                position: "absolute",
-                left: position.x,
-                top: position.y,
-                zIndex: 10,
-                userSelect: "none",
-            }}
-        >
-            {children}
-        </div>
-    );
+    // Calc new position based on mouse movement
+    const onPointerMove = useCallback((e) => {
+        if (!isDragging) return;
+        setPosition({x: e.clientX - offset.x, y: e.clientY - offset.y});
+    }, [isDragging, offset]);
+
+    // Stop dragging and release the pointer capture
+    const onPointerUp = useCallback((e) => {
+        const el = e.currentTarget;
+        el.releasePointerCapture(e.pointerId);
+        setIsDragging(false);
+    }, []);
+
+    return (<div
+        onPointerDown={onPointerDown}
+        onPointerMove={onPointerMove}
+        onPointerUp={onPointerUp}
+        style={{
+            position: "absolute", left: position.x, top: position.y, zIndex: 10, userSelect: "none",
+        }}
+    >
+        {children}
+    </div>);
 }
