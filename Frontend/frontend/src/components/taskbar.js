@@ -8,6 +8,12 @@ import shutdownIcon from '../assets/shut_down_normal-3.png';
 import LogoutIcon from '../assets/key_win-0.png';
 import SettingsIcon from '../assets/settings_gear_cool-4.png';
 import ChangePassword from "./ChangePassword";
+import start from '../assets/windows-0.png'
+import mycomputericon from '../assets/computer-3.png'
+import htool3000icon from '../assets/window_red_hilights.png'
+import internetexplorericon from '../assets/msie1-2.png'
+import notepadicon from '../assets/address_book_pad.png'
+import recyclebinicon from '../assets/recycle_bin_empty_cool-2.png'
 
 export default function Taskbar({ windows, onWindowClick }) {
     const [isStartMenuOpen, setIsStartMenuOpen] = useState(false);
@@ -43,17 +49,17 @@ export default function Taskbar({ windows, onWindowClick }) {
     const getIconForWindow = (windowType) => {
         switch (windowType) {
             case 'notepad':
-                return 'https://win98icons.alexmeub.com/icons/png/address_book_pad.png';
+                return notepadicon;
             case 'recycleBin':
-                return 'https://win98icons.alexmeub.com/icons/png/recycle_bin_empty_cool-2.png';
+                return recyclebinicon;
             case 'iExplorer':
-                return 'https://win98icons.alexmeub.com/icons/png/msie1-2.png';
+                return internetexplorericon;
             case 'hackingTool':
-                return 'https://win98icons.alexmeub.com/icons/png/window_red_hilights.png';
+                return htool3000icon;
             case 'weatherApp':
                 return weatherIcon;
             default:
-                return 'https://win98icons.alexmeub.com/icons/png/application-0.png';
+                return start;
         }
     };
 
@@ -117,7 +123,7 @@ export default function Taskbar({ windows, onWindowClick }) {
                 className={`start-button ${isStartMenuOpen ? 'active' : ''}`}
                 onClick={toggleStartMenu}
             >
-                <img src="https://win98icons.alexmeub.com/icons/png/windows-0.png" alt="start"/>
+                <img src={start} alt="start"/>
                 Start
             </button>
             <div style={{}} className="spacer">||</div>
