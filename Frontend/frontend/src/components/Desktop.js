@@ -21,9 +21,40 @@ function Desktop() {
     const [myComputerOpen, setMyComputerOpen] = useState(false);
     const [weatherAppOpen, setWeatherAppOpen] = useState(false);
     const [startWindowOpen, setStartWindowOpen] = useState(false);
+
+    // Shared state for all windows
+    const [windows, setWindows] = useState({
+        notepad: {active: false, visible: false, title: "Notepad"},
+        recycleBin: {active: false, visible: false, title: "Recycle Bin"},
+        iExplorer: {active: false, visible: false, title: "Internet Explorer"},
+        hackingTool: {active: false, visible: false, title: "Hacking Tool 3000"},
+        weatherApp: {active: false, visible: false, title: "Weather App"},
+    });
+
     //SPA Frontend of Desktop starts here, cant write comments inside of return statements,
     // this just opens up each Pop-up by the OnClick determined in every component file
 
+    // Functions to manage window states
+    const openWindow = (window) => {
+        setWindows(prev => ({
+            ...prev,
+            [window]: {...prev[window], active: true, visible: true}
+        }));
+    }
+
+    const minimizeWindow = (window) => {
+        setWindows(prev => ({
+            ...prev,
+            [window]: {...prev[window], active: true, visible: false}
+        }));
+    }
+
+    const closeWindow = (window) => {
+        setWindows(prev => ({
+            ...prev,
+            [window]: {...prev[window], active: false, visible: false}
+        }));
+    }
     /**
      * When this site is loaded:
      * Attempts to play the Windows 95 startup sound.
@@ -40,43 +71,49 @@ function Desktop() {
     return (
         <div className="desktop">
             <Taskbar
-                openWindows={{
-                    notepad: {isOpen: notepadOpen, title: "Notepad"},
-                    recycleBin: {isOpen: recycleBinOpen, title: "Recycle Bin"},
-                    iExplorer: {isOpen: iExplorerOpen, title: "Internet Explorer"},
-                    hackingTool: {isOpen: hackingToolOpen, title: "Hacking Tool 3000"},
-                    weatherApp: {isOpen: weatherAppOpen, title: "Weather App"}
-                }}
-                onWindowClick={{
-                    notepad: () => setNotepadOpen(true),
-                    recycleBin: () => setRecycleBinOpen(true),
-                    iExplorer: () => setIExplorerOpen(true),
-                    hackingTool: () => setHackingTool3000Open(true),
-                    weatherApp: () => setWeatherAppOpen(true)
-                }}
+                windows={windows}
+                onWindowClick={(key) => windows[key].visible ? minimizeWindow(key) : openWindow(key)
+                }
             />
 
-            <RecycleBinButton onOpen={() => setRecycleBinOpen(true)}/>
-            {recycleBinOpen && (
-                <RecycleBin onClose={() => setRecycleBinOpen(false)}/>
+            <RecycleBinButton onOpen={() => openWindow("recycleBin")}/>
+            {windows.recycleBin.visible && (
+                <RecycleBin
+                    onMinimize={() => minimizeWindow("recycleBin")}
+                    onClose={() => closeWindow("recycleBin")}
+                />
             )}
 
 
-            <NotepadButton onOpen={() => setNotepadOpen(true)}/>
-            {notepadOpen && (
-                <Notepad onClose={() => setNotepadOpen(false)}/>
+            <NotepadButton onOpen={() => openWindow("notepad")}/>
+            {windows.notepad.visible && (
+                <Notepad
+                    onMinimize={() => minimizeWindow("notepad")}
+                    onClose={() => closeWindow("notepad")}
+                />
             )}
-            <IExplorerButton onOpen={() => setIExplorerOpen(true)}/>
-            {iExplorerOpen && (
-                <IExplorer onClose={() => setIExplorerOpen(false)}/>
+
+            <IExplorerButton onOpen={() => openWindow("iExplorer")}/>
+            {windows.iExplorer.visible && (
+                <IExplorer
+                    onMinimize={() => minimizeWindow("iExplorer")}
+                    onClose={() => closeWindow("iExplorer")}
+                />
             )}
-            <HackingTool3000Button onOpen={() => setHackingTool3000Open(true)}/>
-            {hackingToolOpen && (
-                <HackingTool3000 onClose={() => setHackingTool3000Open(false)}/>
+
+            <HackingTool3000Button onOpen={() => openWindow("hackingTool")}/>
+            {windows.hackingTool.visible && (
+                <HackingTool3000
+                    onMinimize={() => minimizeWindow("hackingTool")}
+                    onClose={() => closeWindow("hackingTool")}
+                />
             )}
-            <WeatherAppButton onOpen={() => setWeatherAppOpen(true)}/>
-            {weatherAppOpen && (
-                <WeatherApp onClose={() => setWeatherAppOpen(false)}/>
+            <WeatherAppButton onOpen={() => openWindow("weatherApp")}/>
+            {windows.weatherApp.visible && (
+                <WeatherApp
+                    onMinimize={() => minimizeWindow("weatherApp")}
+                    onClose={() => closeWindow("weatherApp")}
+                />
             )}
 
         </div>

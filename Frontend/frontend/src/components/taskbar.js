@@ -9,7 +9,7 @@ import LogoutIcon from '../assets/key_win-0.png';
 import SettingsIcon from '../assets/settings_gear_cool-4.png';
 import ChangePassword from "./ChangePassword";
 
-export default function Taskbar({openWindows, onWindowClick}) {
+export default function Taskbar({ windows, onWindowClick }) {
     const [isStartMenuOpen, setIsStartMenuOpen] = useState(false);
     const navigate = useNavigate();
 
@@ -122,12 +122,12 @@ export default function Taskbar({openWindows, onWindowClick}) {
             </button>
             <div style={{}} className="spacer">||</div>
             <div className="taskbar-windows">
-                {Object.entries(openWindows || {}).map(([key, window]) => (
-                    window.isOpen && (
+                {Object.entries(windows).map(([key, window]) => (
+                    window.active && (
                         <button
                             key={key}
                             className="taskbar-window-button"
-                            onClick={() => onWindowClick[key]()}
+                            onClick={() => onWindowClick(key)}
                         >
                             <img
                                 src={getIconForWindow(key)}

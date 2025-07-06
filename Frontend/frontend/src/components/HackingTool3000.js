@@ -6,10 +6,11 @@ import DraggableWindow from "./draggableWindow.js";
 /**
  *  Just the basic UI Window placeholder, will maybe be filled with content later
  * @param OnClose just determines the component thats called on in Desktop.js to close the tab
+ * @param onMinimize function to minimize the window
  *
  * @returns a draggable window that can be filled with content
  */
-export default function HackingTool3000({ onClose }) {
+export default function HackingTool3000({ onMinimize, onClose }) {
     return (
             <DraggableWindow initialPosition={{ x: 400, y: 300 }} handleSelector=".title-bar">
         <div className="window"
@@ -23,7 +24,7 @@ export default function HackingTool3000({ onClose }) {
             <div className="title-bar">
                 <div className="title-bar-text">Hackingtool 3000</div>
                 <div className="title-bar-controls">
-                    <button aria-label="Minimize"></button>
+                    <button aria-label="Minimize" onClick={onMinimize}></button>
                     <button aria-label="Maximize"></button>
                     <button aria-label="Close" onClick={onClose}></button>
                 </div>

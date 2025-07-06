@@ -23,10 +23,11 @@ const formattedDateReady = ""+formattedDateDay + "." + formattedDateMonth + "." 
 /**
  * This function is a working weather app in the look of our website, it provides the weather data for the next few hours in Stuttgart via Brightsky API.
  * @param OnClose just does the same as in the other components, gives parameter that interacts with App.js to close window
+ * @param onMinimize function to minimize the window
  *
  * @returns A draggable window that shows weather
  */
-export default function WeatherApp({ onClose }) {
+export default function WeatherApp({ onMinimize, onClose }) {
     const [weatherData, setWeatherData] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
 
@@ -65,7 +66,7 @@ export default function WeatherApp({ onClose }) {
                     <div className="title-bar">
                         <div className="title-bar-text">Weather</div>
                         <div className="title-bar-controls">
-                            <button aria-label="Minimize"></button>
+                            <button aria-label="Minimize" onClick={onMinimize}></button>
                             <button aria-label="Maximize"></button>
                             <button aria-label="Close" onClick={onClose}></button>
                         </div>

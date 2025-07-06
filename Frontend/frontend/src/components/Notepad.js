@@ -177,11 +177,12 @@ export function FileSelector({onClose, notepads, setTextContent, setNotepads}) {
  * Save File: Current text is saved.
  * Open File: Opens a Table, where you can selected saved Files.
  *
+ * @param onMinimize
  * @param onClose
  * @returns {JSX.Element}
  */
 
-export default function Notepad({onClose}) {
+export default function Notepad({ onMinimize, onClose}) {
     // Defintionen für das Filemenü
     const [fileMenuOpen, setFileMenuOpen] = useState(false);
     const [showFileSelector, setShowFileSelector] = useState(false);
@@ -277,7 +278,7 @@ export default function Notepad({onClose}) {
                     <div className="title-bar">
                         <div className="title-bar-text">Notepad</div>
                         <div className="title-bar-controls">
-                            <button aria-label="Minimize"></button>
+                            <button aria-label="Minimize" onClick={onMinimize}></button>
                             <button aria-label="Maximize"></button>
                             <button aria-label="Close" onClick={onClose}></button>
                         </div>
