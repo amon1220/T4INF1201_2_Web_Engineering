@@ -93,7 +93,7 @@ export default function WeatherApp({ onMinimize, onClose }) {
                 <div className="title-bar">
                     <div className="title-bar-text">Weather</div>
                     <div className="title-bar-controls">
-                        <button aria-label="Minimize"></button>
+                        <button aria-label="Minimize" onClick={onMinimize}></button>
                         <button aria-label="Maximize"></button>
                         <button aria-label="Close" onClick={onClose}></button>
                     </div>

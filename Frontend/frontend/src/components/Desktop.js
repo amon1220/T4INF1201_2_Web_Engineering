@@ -13,14 +13,6 @@ import WeatherAppButton from "./WeatherAppButton";
 import WeatherApp from "./WeatherApp";
 
 function Desktop() {
-//Variables to determine the State of the Popups on screen
-    const [notepadOpen, setNotepadOpen] = useState(false); // true = geöffnet
-    const [recycleBinOpen, setRecycleBinOpen] = useState(false);
-    const [hackingToolOpen, setHackingTool3000Open] = useState(false);
-    const [iExplorerOpen, setIExplorerOpen] = useState(false);
-    const [myComputerOpen, setMyComputerOpen] = useState(false);
-    const [weatherAppOpen, setWeatherAppOpen] = useState(false);
-    const [startWindowOpen, setStartWindowOpen] = useState(false);
 
     // Shared state for all windows
     const [windows, setWindows] = useState({
