@@ -47,6 +47,10 @@ export default function Login() {
             });
 
             if (!res.ok) {
+                if (res.status === 401) {
+                    setError("Invalid username or password");
+                    return;
+                }
                 const contentType = res.headers.get("Content-Type") || "";
                 let errMsg;
                 if (contentType.includes("application/json")) {
