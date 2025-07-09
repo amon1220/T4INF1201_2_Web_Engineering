@@ -11,6 +11,8 @@ import HackingTool3000Button from "./HackingTool3000Button";
 import HackingTool3000 from "./HackingTool3000";
 import WeatherAppButton from "./WeatherAppButton";
 import WeatherApp from "./WeatherApp";
+import GameCenterButton from "./GameCenterButton";
+import GameCenter from "./GameCenter";
 
 function Desktop() {
 
@@ -21,6 +23,7 @@ function Desktop() {
         iExplorer: {active: false, visible: false, title: "Internet Explorer"},
         hackingTool: {active: false, visible: false, title: "Hacking Tool 3000"},
         weatherApp: {active: false, visible: false, title: "Weather App"},
+        gameCenter: {active: false, visible: false, title: "Game Center"},
     });
 
     //SPA Frontend of Desktop starts here, cant write comments inside of return statements,
@@ -105,6 +108,14 @@ function Desktop() {
                 <WeatherApp
                     onMinimize={() => minimizeWindow("weatherApp")}
                     onClose={() => closeWindow("weatherApp")}
+                />
+            )}
+
+            <GameCenterButton onOpen={() => openWindow("gameCenter")}/>
+            {windows.gameCenter.visible && (
+                <GameCenter
+                    onMinimize={() => minimizeWindow("gameCenter")}
+                    onClose={() => closeWindow("gameCenter")}
                 />
             )}
 
