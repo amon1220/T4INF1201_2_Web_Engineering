@@ -386,6 +386,11 @@ def register():
     if not all([username, email, password]):
         return jsonify({'message': 'Missing Fields'}), 400
 
+
+    pw_valid, msg = password_policy(password)
+    if not pw_valid:
+        return jsonify({'message': msg}), 400
+
     with create_session() as session:
         if session.query(User).filter_by(username=username).first():
             return jsonify({'message': 'Username already exits'}), 400
@@ -430,8 +435,9 @@ def change_pw():
     if not all([user_id, old_password, new_password]):
         return jsonify({'message': 'Missing Fields'}), 400
 
-    if not password_policy(new_password):
-        return jsonify({'message': 'Password does not meet requirements'}), 400
+    pw_valid, msg = password_policy(password)
+    if not pw_valid:
+        return jsonify({'message': msg}), 400
 
     with create_session() as session:
         user = session.get(User, user_id)
