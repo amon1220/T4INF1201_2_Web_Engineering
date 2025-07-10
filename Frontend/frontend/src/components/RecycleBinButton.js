@@ -9,8 +9,8 @@ import recyclebinicon from '../assets/recycle_bin_empty_cool-2.png'
  */
 export default function RecycleBinButton({ onOpen }) {
     return (
-        <div className="recyclebin-icon">
-            <button className="recyclebin-button" onClick={onOpen}>
+        <div className="desktop-icon">
+            <button className="desktop-button" onClick={onOpen}>
                 <img src={recyclebinicon} alt="recyclebinicon" />
                 <br></br>
                 <span>Recycle Bin</span>

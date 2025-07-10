@@ -84,71 +84,6 @@
     color: white;
 }
 
-.notepad-button {
-    background: none;
-    border: none;
-    outline: none;
-    box-shadow: none;
-    font-family: 'Pixelated MS Sans Serif', Arial;
-    font-size: 14px;
-    padding: 5px 10px;
-    margin-right: 5px;
-    margin-left: 29px;
-    margin-top: 15px;
-}
-
-.recyclebin-button {
-    background: none;
-    border: none;
-    outline: none;
-    box-shadow: none;
-    font-family: 'Pixelated MS Sans Serif', Arial;
-    font-size: 14px;
-    padding: 5px 10px;
-    margin-right: 5px;
-    margin-left: 19px;
-    margin-top: 15px;
-}
-
-.iexplorer-button {
-    background: none;
-    border: none;
-    outline: none;
-    box-shadow: none;
-    font-family: 'Pixelated MS Sans Serif', Arial;
-    font-size: 14px;
-    padding: 5px 10px;
-    margin-right: 5px;
-    margin-left: 7px;
-    margin-top: 15px;
-}
-
-.hackingtool3000-button {
-    background: none;
-    border: none;
-    outline: none;
-    box-shadow: none;
-    font-family: 'Pixelated MS Sans Serif', Arial;
-    font-size: 14px;
-    padding: 5px 10px;
-    margin-right: 5px;
-    margin-left: 2px;
-    margin-top: 15px;
-}
-
-.weatherapp-button {
-    background: none;
-    border: none;
-    outline: none;
-    box-shadow: none;
-    font-family: 'Pixelated MS Sans Serif', Arial;
-    font-size: 14px;
-    padding: 6px 34px;
-    margin-right: 15px;
-    margin-left: 5px;
-    margin-top: 15px;
-}
-
 .menu {
     background-color: #c0c0c0;
     border: 2px outset #fff;
@@ -189,10 +124,44 @@
 
 
 #biggericon {
+    width: 56px;
+    height: 88px;
 
-    width: 45px;
-    height: 70px;
+    margin-right: 5px;
+    margin-left: 7px;
+    margin-top: -15px;
+    margin-bottom: -15px;
+    padding-bottom: 5px;
+}
 
+.desktop-icon {
+    width: 120px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin: 10px 0 0 3px;
+}
+.desktop-button {
+    width: 100%;
+    min-height: 70px;
+
+    background: none;
+    border: none;
+    outline: none;
+    box-shadow: none;
+    font-family: 'Pixelated MS Sans Serif', Arial;
+    font-size: 14px;
+    padding: 5px 10px;
+    color: white;
+    margin-right: 5px;
+    margin-left: 7px;
+    margin-top: 15px;
+}
+
+.desktop-button img {
+    width: 40px;
+    height: 40px;
+    margin-bottom: 5px;
 }
 
 #loadinggate {
