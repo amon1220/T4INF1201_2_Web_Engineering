@@ -16,6 +16,8 @@ export function FileSelector({onClose, notepads, setTextContent, setNotepads}) {
     const [error, setError] = useState("");
     const tableRef = useRef(null);
 
+
+
     /**
      * When the FileSelector is loaded:
      * Gets the table. Defines a function that, when something in the table is
@@ -190,6 +192,7 @@ export default function Notepad({ onMinimize, onClose}) {
     const [notepads, setNotepads] = useState([]);
     const [textContent, setTextContent] = useState("");
     const [success, setSuccess] = useState("");
+    const [showHelp, setShowHelp] = useState(false);
 
     function startNotpadFileMenu() {
         setFileMenuOpen(!fileMenuOpen);
@@ -293,7 +296,8 @@ export default function Notepad({ onMinimize, onClose}) {
                     }}>
                         <div className="statusbar" style={{position: 'relative'}}>
                             <button className="notepad-file-help-button" onClick={startNotpadFileMenu}>File</button>
-                            <button className="notepad-file-help-button">Help</button>
+                            <button className="notepad-file-help-button" onClick={() => setShowHelp(true)}>Help</button>
+
 
                             {success && <span style={{color: 'green', fontSize: '12px'}}>{success}</span>}
                             {error && <span style={{color: 'red', fontSize: '12px'}}>{error}</span>}
@@ -332,6 +336,38 @@ export default function Notepad({ onMinimize, onClose}) {
                               setNotepads={setNotepads}
                 />
             )}
+
+            {showHelp && (
+                <DraggableWindow initialPosition={{x: 350, y: 160}} handleSelector=".title-bar">
+
+                    <div div className="window"
+                         style={{
+                             position: "absolute", top: "30%", left: "50%", width: 320
+                         }}>
+                        <div className="title-bar">
+                            <div className="title-bar-text">Notepad – Help</div>
+                            <div className="title-bar-controls">
+                                <button aria-label="Minimize" onClick={onMinimize}></button>
+                                <button aria-label="Maximize"></button>
+                                <button aria-label="Close" onClick={() => setShowHelp(false)}></button>
+                            </div>
+                        </div>
+
+                        <div className="window-body" style={{ padding: 16, margin: 0, display: "flex", flexDirection: "column"}}>
+                            <b>Kurzanleitung:</b>
+                            <br/>
+                            <b>Save File</b>
+                            Der Button "Save File" speichert die Datei ab. <br/>
+                            <br/>
+                            <b>Open File</b>
+                            Du kannst gespeicherte Dateien jederzeit öffnen oder löschen,indem du über "Open File" ein weiteres Fenster
+                            mit einer übersichtlichen Tabelle aller Dateien öffnest, die du erstellt hast. <br/>
+                            Hier kannst du die weitere Auswahl treffen.
+                        </div>
+                    </div>
+                </DraggableWindow>
+            )}
+
 
 
         </>
