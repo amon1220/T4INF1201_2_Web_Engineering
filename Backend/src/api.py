@@ -435,7 +435,7 @@ def change_pw():
     if not all([user_id, old_password, new_password]):
         return jsonify({'message': 'Missing Fields'}), 400
 
-    pw_valid, msg = password_policy(password)
+    pw_valid, msg = password_policy(new_password)
     if not pw_valid:
         return jsonify({'message': msg}), 400
 
