@@ -122,6 +122,15 @@
     width: 200px;
 }
 
+.wordleapp-button img {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+}
+
+.wordleapp-button {
+    padding: 3px;
+}
 
 #biggericon {
     width: 56px;

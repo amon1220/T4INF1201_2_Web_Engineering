@@ -14,7 +14,7 @@ export default function WordleAppButton({ onOpen }) {
     return (
         <div className="wordleapp-icon">
             <button className="wordleapp-button" onClick={onOpen}>
-                <img id="biggericon" src={wordleIcon} alt="Symbol für Wordle-Spiel" />
+                <img src={wordleIcon} alt="Symbol für Wordle-Spiel" />
                 <br />
                 <span>Wordle</span>
             </button>
