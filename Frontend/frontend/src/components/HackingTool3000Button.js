@@ -10,11 +10,11 @@ import htool3000icon from '../assets/window_red_hilights.png'
  */
 export default function HackingTool3000Button({ onOpen }) {
     return (
-        <div className="hackingtool3000-icon">
-            <button className="hackingtool3000-button" onClick={onOpen}>
+        <div className="desktop-icon">
+            <button className="desktop-button" onClick={onOpen}>
                 <img src={htool3000icon} alt="htool3000icon" />
                 <br></br>
-                <span>HackingTool 3000</span>
+                <span>HackingTool3000</span>
             </button>
         </div>
     );
