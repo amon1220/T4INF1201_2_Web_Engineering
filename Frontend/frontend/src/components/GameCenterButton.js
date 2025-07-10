@@ -10,8 +10,8 @@ import gamecentericon from '../assets/game_center_icon.png';
  */
 export default function GameCenterButton({ onOpen }) {
     return (
-        <div className="iexplorer-icon">
-            <button className="iexplorer-button" onClick={onOpen}>
+        <div className="desktop-icon">
+            <button className="desktop-button" onClick={onOpen}>
                 <img src={gamecentericon} alt="game_center_icon" />
                 <br></br>
                 <span>Game Center</span>

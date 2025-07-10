@@ -10,8 +10,8 @@ import notepadicon from '../assets/address_book_pad.png'
  */
 export default function NotepadButton({ onOpen }) {
     return (
-        <div className="notepad-icon">
-            <button className="notepad-button" onClick={onOpen}>
+        <div className="desktop-icon">
+            <button className="desktop-button" onClick={onOpen}>
                 <img src={notepadicon} alt="notepadicon" />
                 <br></br>
                 <span>Notepad</span>

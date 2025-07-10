@@ -10,8 +10,8 @@ import internetexplorericon from '../assets/msie1-2.png'
  */
 export default function IExplorerButton({ onOpen }) {
     return (
-        <div className="iexplorer-icon">
-            <button className="iexplorer-button" onClick={onOpen}>
+        <div className="desktop-icon">
+            <button className="desktop-button" onClick={onOpen}>
                 <img src={internetexplorericon} alt="internetexplorericon" />
                 <br></br>
                 <span>Internet Explorer</span>
