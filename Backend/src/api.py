@@ -10,7 +10,7 @@ api = Blueprint('api', __name__)
 @api.route('/data')
 def get_data():
     """
-    GET /dataAdd commentMore actions
+    GET /api/dataAdd commentMore actions
 
     route for initial testing
     """
@@ -20,7 +20,7 @@ def get_data():
 @api.route('/users')
 def get_users():
     """
-    GET /users
+    GET /api/users
 
     Get a list of all users
 
@@ -40,7 +40,7 @@ def get_users():
 @api.route('/users/<int:user_id>', methods=['GET'])
 def get_user(user_id):
     """
-    GET /users/<user_id>
+    GET /api/users/<user_id>
 
     Get a user by id.
 
@@ -69,7 +69,7 @@ def get_user(user_id):
 @api.route('/users', methods=['POST'])
 def create_user():
     """
-    POST /users
+    POST /api/users
 
     Create a new user with the provided data.
 
@@ -105,7 +105,7 @@ def create_user():
 @api.route('/users/<int:user_id>', methods=['PUT'])
 def update_user(user_id):
     """
-    GET /users/<user_id>
+    GET /api/users/<user_id>
 
     Get a user by id.
 
@@ -136,7 +136,7 @@ def update_user(user_id):
 @api.route('/users/<int:user_id>', methods=['DELETE'])
 def delete_user(user_id):
     """
-    DELETE /users/<user_id>
+    DELETE /api/users/<user_id>
 
     Delete a user by id.
 
@@ -159,7 +159,7 @@ def delete_user(user_id):
 @api.route('/notepads')
 def get_notepads():
     """
-    GET /notepads
+    GET /api/notepads
 
     Get all notepads.
 
@@ -180,7 +180,7 @@ def get_notepads():
 @api.route('/notepads/fromUser/<int:user_id>', methods=['GET'])
 def get_user_notepads(user_id):
     """
-    GET /notepads/fromUser/<int:user_id>
+    GET /api/notepads/fromUser/<int:user_id>
 
     Get all notepad that are associated with the user.
 
@@ -212,7 +212,7 @@ def get_user_notepads(user_id):
 @api.route('/notepads/<int:notepad_id>', methods=['GET'])
 def get_notepad(notepad_id):
     """
-    GET /notepads/<notepad_id>
+    GET /api/notepads/<notepad_id>
 
     Get a single notepad by id.
 
@@ -241,7 +241,7 @@ def get_notepad(notepad_id):
 @api.route('/notepad', methods=['POST'])
 def create_notepad():
     """
-    POST /notepad
+    POST /api/notepad
 
     Create a new notepad.
 
@@ -278,7 +278,7 @@ def create_notepad():
 @api.route('/notepad/<int:notepad_id>', methods=['PUT'])
 def update_notepad(notepad_id):
     """
-    PUT /notepad/<notepad_id>
+    PUT /api/notepad/<notepad_id>
 
     Update an existing notepad.
 
@@ -310,7 +310,7 @@ def update_notepad(notepad_id):
 @api.route('/notepad/<int:notepad_id>', methods=['DELETE'])
 def delete_notepad(notepad_id):
     """
-    DELETE /notepad/<notepad_id>
+    DELETE /api/notepad/<notepad_id>
 
     Delete a notepad by id.
 
@@ -332,13 +332,25 @@ def delete_notepad(notepad_id):
 
 @api.route('login', methods=['POST'])
 def login():
+    """
+    POST /api/login
+    Login a user with username and password
+    Request JSON:
+        {
+            'username': str,
+            'password': str
+        }
+    Checks if user exists and password is correct
+    If successful, returns an access token and user json object
+
+    """
     data = request.json
     username = data.get('username')
     password = data.get('password')
     with create_session() as session:
         user = session.query(User).filter_by(username=username).first()
         if not user or not check_password_hash(user.password, password):
-            return abort(401, "Invalid username or password")
+            return jsonify({'message': 'Invalid Username or Password'}), 401
 
         access_token = create_access_token(identity=user.user_id)
         return jsonify({
@@ -352,6 +364,20 @@ def login():
 
 @api.route('/register', methods=['POST'])
 def register():
+    """
+    POST /api/register
+    Register a new user with username, email and password
+    Request JSON:
+        {
+            'username': str,
+            'email': str,
+            'password': str
+        }
+
+    Checks for missing fields, existing username and email
+    If successful creates a new user and hashes the password
+    :return JSON with: access token and user data
+    """
     data = request.json
     username = data.get('username')
     email = data.get('email')
@@ -383,6 +409,19 @@ def register():
 
 @api.route('/change_pw', methods=['POST'])
 def change_pw():
+    """
+    POST /api/change_pw
+    Change the password of a user
+    Request JSON:
+        {
+            'user_id': int,
+            'oldPassword': str,
+            'newPassword': str
+        }
+    Check if all fields exist and password meets policy requirements
+    If successful, updates the user password in the database
+    :return:
+    """
     data = request.json
     user_id = data.get('user_id')
     old_password = data.get('oldPassword')
