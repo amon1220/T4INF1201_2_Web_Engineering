@@ -1,5 +1,5 @@
 //import React from "react";
-import React, { useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import "../App.css";
 import DraggableWindow from "./draggableWindow.js";
 
@@ -55,10 +55,13 @@ export default function HackingTool3000({ onMinimize, onClose }) {
 
 export function MatrixRain() {
     const canvasRef = useRef(null);
+    const names = ["Amon", "Jakob", "László", "Leon", "Manu"];
+    const [showNames, setShowNames] = useState(false);
 
     useEffect(() => {
         const canvas = canvasRef.current; // get Canvas Object
         const context = canvas.getContext('2d');
+
 
         // Größe setzen
         canvas.width = 400;
@@ -79,6 +82,7 @@ export function MatrixRain() {
         }
 
         function draw() {
+
             context.fillStyle = 'rgba(0, 0, 0, 0.05)'; // set black transparant overlay for each round
             context.fillRect(0, 0, canvas.width, canvas.height); // // Draw a transparant rectangle over the entire hackingtool window, so the previous frames fade slowly
 
@@ -98,22 +102,41 @@ export function MatrixRain() {
                 }
                 rainDrops[i]++;
             }
+            if (showNames) {
+                context.save();
+                context.font = "bold 28px 'Pixelated MS Sans Serif', Arial, monospace";
+
+
+                context.fillStyle = "#0F0";
+                context.textAlign = "center";
+                names.forEach((name, i) => {
+                    context.fillText(name, canvas.width / 2, 60 + i * 45);
+                });
+                context.textAlign = "left";
+                context.restore();
+            }
         }
+
 
         const intervalId = setInterval(draw, 30);
 
         // Clean up beim Unmount
         return () => clearInterval(intervalId);
-    }, []);
+    }, [showNames]);
 
     return (
         <canvas
             ref={canvasRef}
+            onClick={() => {
+                setShowNames(true);
+                setTimeout(() => setShowNames(false), 2000);
+            }}
             style={{
                 background: "black",
                 display: "block",
                 margin: "auto",
-                borderRadius: "8px"
+                borderRadius: "8px",
+                cursor: "pointer"
             }}
         />
     );

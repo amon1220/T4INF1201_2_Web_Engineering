@@ -14,6 +14,8 @@ import htool3000icon from '../assets/window_red_hilights.png'
 import internetexplorericon from '../assets/msie1-2.png'
 import notepadicon from '../assets/address_book_pad.png'
 import recyclebinicon from '../assets/recycle_bin_empty_cool-2.png'
+import caluclator from '../assets/calculator.png'
+
 
 export default function Taskbar({ windows, onWindowClick }) {
     const [isStartMenuOpen, setIsStartMenuOpen] = useState(false);
@@ -58,6 +60,8 @@ export default function Taskbar({ windows, onWindowClick }) {
                 return htool3000icon;
             case 'weatherApp':
                 return weatherIcon;
+            case 'calculator':
+                return caluclator;
             default:
                 return start;
         }
